@@ -15,6 +15,7 @@ func AdminRoutersInit(r *gin.Engine) {
 		adminRouters.GET("/welcome", admin.MainController{}.Welcome)
 
 		adminRouters.GET("/login", admin.LoginController{}.Index)
+		adminRouters.GET("/captcha", admin.LoginController{}.Captcha)
 		adminRouters.POST("/doLogin", admin.LoginController{}.DoLogin)
 
 		adminRouters.GET("/manager", admin.ManagerController{}.Index)
