@@ -38,7 +38,7 @@ func MakeCaptcha() (string, string, error) {
 
 // 验证验证码
 func VerifyCaptcha(id string, capt string) bool {
-	if store.Verify(id, capt, false) {
+	if store.Verify(id, capt, true) {
 		return true
 	} else {
 		return false

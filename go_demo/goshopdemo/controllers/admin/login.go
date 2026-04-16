@@ -17,7 +17,17 @@ func (con LoginController) Index(c *gin.Context) {
 
 }
 func (con LoginController) DoLogin(c *gin.Context) {
-	c.String(http.StatusOK, "-add--文章-")
+
+	captchaId := c.PostForm("captchaId")
+
+	verifyValue := c.PostForm("verifyValue")
+
+	if flag := models.VerifyCaptcha(captchaId, verifyValue); flag == true {
+		c.String(http.StatusOK, "验证码成功")
+	} else {
+		c.String(http.StatusOK, "验证码失败")
+	}
+
 }
 
 func (con LoginController) Captcha(c *gin.Context) {
