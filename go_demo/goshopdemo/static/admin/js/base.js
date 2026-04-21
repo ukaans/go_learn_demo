@@ -1,7 +1,27 @@
 $(function(){
-	
-	$('.aside h4').click(function(){		
-		
-		$(this).siblings('ul').slideToggle();
-	})
+  baseApp.init();
 })
+
+var baseApp = {
+  init: function(){
+      this.initAside();
+      this.confirmDelete();   
+      this.resizeIframe();
+  },
+  initAside: function(){
+      $('.aside h4').click(function(){
+          $(this).siblings('ul').slideToggle();
+      });
+  },
+  resizeIframe: function(){					
+      $("#rightMain").height($(window).height() - 80);
+  },
+  // 删除提示
+  confirmDelete: function(){
+      $(".delete").click(function(e){
+          if (!confirm("您确定要删除吗？")) {
+              e.preventDefault();
+          }
+      });
+  }
+}

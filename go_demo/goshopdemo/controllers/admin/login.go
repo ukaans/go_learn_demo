@@ -42,13 +42,13 @@ func (con LoginController) DoLogin(c *gin.Context) {
 			userinSlice, _ := json.Marshal(userinfoList)
 			session.Set("userinfo", string(userinSlice))
 			session.Save()
-			con.success(c, "登录成功", "/admin")
+			con.Success(c, "登录成功", "/admin")
 		} else {
-			con.error(c, "用户名或密码错误", "/admin/login")
+			con.Error(c, "用户名或密码错误", "/admin/login")
 		}
 
 	} else {
-		con.error(c, "验证码验证失败", "/admin/login")
+		con.Error(c, "验证码验证失败", "/admin/login")
 	}
 
 }
@@ -68,6 +68,6 @@ func (con LoginController) LoginOut(c *gin.Context) {
 	session := sessions.Default(c)
 	session.Delete("userinfo")
 	session.Save()
-	con.success(c, "退出登录成功", "/admin/login")
+	con.Success(c, "退出登录成功", "/admin/login")
 
 }
