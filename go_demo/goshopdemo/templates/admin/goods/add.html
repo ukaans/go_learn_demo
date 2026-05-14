@@ -1,12 +1,14 @@
 {{ define "admin/goods/add.html" }}
 {{ template "admin/public/page_header.html" .}}
-<!-- Include Editor style. -->
-<link href="https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
-
-<!-- Include Editor JS files. -->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js"></script>
-<!-- 语言包 -->
-<script type="text/javascript" src="/static/admin/js/zh_cn.js"></script>
+<!-- 富文本编辑器 -->
+<link href="/static/wysiwyg-editor/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/static/wysiwyg-editor/js/froala_editor.pkgd.min.js"></script>
+<script type="text/javascript" src="/static/wysiwyg-editor/js/zh_cn.js"></script>
+<!-- 上传图片的js css -->
+<link rel="stylesheet" type="text/css" href="/static/diyUpload/css/webuploader.css">
+<link rel="stylesheet" type="text/css" href="/static/diyUpload/css/diyUpload.css">
+<script type="text/javascript" src="/static/diyUpload/js/webuploader.html5only.min.js"></script>
+<script type="text/javascript" src="/static/diyUpload/js/diyUpload.js"></script>
 
 <div class="container-fluid">
     <div class="row">
@@ -37,8 +39,13 @@
                                               <li>  <span>商品版本:</span> <input type="text" name="goods_version" class="input"/></li>                            
                                               <li>  <span>所属分类:</span> 
                                                   
-                                                  <select name="cid" id="cid">
-                                                      
+                                                  <select name="cid" id="cid">                                                   
+                                                    {{range $key,$value := .goodsCateList}}
+                                                        <option value="{{$value.Id}}">{{$value.Title}}</option>
+                                                        {{range $k,$v := $value.GoodsCateItems}}
+                                                            <option value="{{$v.Id}}"> ----{{$v.Title}}</option>
+                                                        {{end}}
+                                                    {{end}}
                                                   </select>                            
                                               </li>
                                               <li> <span> 商品图片:</span> <input type="file" name="pic"/></li>
@@ -68,7 +75,12 @@
                                       <ul class="form_input">
       
                                               <li> <span>商品颜色:</span>                                                  
-                                                 
+
+                                                {{range $key,$value := .goodsColorList}}
+                                                    <input type="checkbox" value="{{$value.Id}}" name="goods_color" id="color_{{$value.Id}}"/> 
+                                                    <label for="color_{{$value.Id}}">{{$value.ColorName}}</label>   
+                                                    &nbsp; 
+                                                 {{end}}
                                                
                                                </li>                
               
@@ -107,7 +119,11 @@
       
                                               <li> <span>商品类型:　</span>                                                    
                                                   <select name="goods_type_id" id="goods_type_id">        
-                                                      <option value="0">--请选择商品类型--</option>                                                           
+                                                      <option value="0">--请选择商品类型--</option> 
+                                                      
+                                                       {{range $key,$value := .goodsTypeList}}
+                                                             <option value="{{$value.Id}}">{{$value.Title}}</option>
+                                                       {{end}}
                                                   </select>
               
                                                </li>
@@ -115,17 +131,20 @@
                                       </ul>
       
                                       <ul class="form_input" id="goods_type_attribute">
-            
-      
+                                        
+                                             
                                       </ul>
       
                               </div>
                               <div role="tabpanel" class="tab-pane" id="photo">
       
-                                      商品相册
+                                      <div id="photoUploader"></div>
+                                      <div id="photoList"></div>
                               </div>
                         </div>
 
+                        <br/>
+                        <button type="submit" class="btn btn-primary">提交</button>
                     </form>
                 </div>
             </div>
@@ -143,6 +162,55 @@
         // toolbarButtonsXS: [ ['undo', 'redo'], ['bold', 'italic', 'underline'] ]
         imageUploadURL: '/admin/goods/imageUpload'
     });
+    //获取商品类型属性
+    $(function(){
+        $("#goods_type_id").change(function(){
+            var cateId=$(this).val()   
+                   
+            $.get("/admin/goods/goodsTypeAttribute",{"cateId":cateId},function(response){
+                console.log(response)
+                var str =""
+                if(response.success){
+                    var attrData=response.result;
+                    for (var i=0;i<attrData.length;i++){
+                        if(attrData[i].attr_type==1){
+                            str += '<li><span>' + attrData[i].title + ': 　</span> <input type="hidden" name="attr_id_list" value="' + attrData[i].id + '" />   <input type="text" name="attr_value_list" /></li>'
+                        } else if (attrData[i].attr_type == 2) {
+                            str += '<li><span>' + attrData[i].title + ': 　</span> <input type="hidden" name="attr_id_list" value="' + attrData[i].id + '">  <textarea cols="50" rows="3" name="attr_value_list"></textarea></li>'
+                        }else {
+                            var attrArray = attrData[i].attr_value.split("\n")
+                            str += '<li><span>' + attrData[i].title + ': 　</span>  <input type="hidden" name="attr_id_list" value="' + attrData[i].id + '" />';
+                            str += '<select name="attr_value_list">'
+                            for (var j = 0; j < attrArray.length; j++) {
+                                str += '<option value="' + attrArray[j] + '">' + attrArray[j] + '</option>';
+                            }
+                            str += '</select>'
+                            str += '</li>'
+                        }
+                    }
+                    $("#goods_type_attribute").html(str);
+                }
+
+
+            })
+        })
+    })
+
+    //批量上传图片
+    $(function(){
+        $('#photoUploader').diyUpload({
+            url:'/admin/goods/imageUpload',
+            success:function( response ) {
+                // console.info( data );
+                var photoStr='<input type="hidden" name="goods_image_list" value='+response.link+' />';
+                $("#photoList").append(photoStr)
+            },
+            error:function( err ) {
+                console.info( err );	
+            }
+        });
+
+    })
 </script>
 </body>
 </html>
