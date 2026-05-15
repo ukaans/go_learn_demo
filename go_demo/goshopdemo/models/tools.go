@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"errors"
 	"fmt"
+	"html/template"
 	"io"
 	"os"
 	"path"
@@ -58,13 +59,19 @@ func Md5(str string) string {
 	return fmt.Sprintf("%x", h.Sum(nil))
 }
 
-// 把string转换成int
+// 表示把string转换成int
 func Int(str string) (int, error) {
 	n, err := strconv.Atoi(str)
 	return n, err
 }
 
-// 把int转换成string
+// 表示把string转换成Float64
+func Float(str string) (float64, error) {
+	n, err := strconv.ParseFloat(str, 64)
+	return n, err
+}
+
+// 表示把int转换成string
 func String(n int) string {
 	str := strconv.Itoa(n)
 	return str
@@ -110,4 +117,9 @@ func UploadImg(c *gin.Context, picName string) (string, error) {
 	c.SaveUploadedFile(file, dst)
 	return dst, nil
 
+}
+
+// 把字符串解析成html
+func Str2Html(str string) template.HTML {
+	return template.HTML(str)
 }
