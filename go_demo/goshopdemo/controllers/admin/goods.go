@@ -3,6 +3,7 @@ package admin
 import (
 	"fmt"
 	"goshopdemo/models"
+	"math"
 	"net/http"
 	"strings"
 	"sync"
@@ -17,13 +18,55 @@ type GoodsController struct {
 }
 
 func (con GoodsController) Index(c *gin.Context) {
+	//当前页数
+	page, _ := models.Int(c.Query("page"))
+	if page == 0 {
+		page = 1
+	}
+	//条件
+	where := "is_delete=0"
+
+	//获取keyword
+	keyword := c.Query("keyword")
+	if len(keyword) > 0 {
+		where += " AND title like \"%" + keyword + "%\""
+	}
+	// is_delete=0 AND title like "%小米%"
+
+	//每页查询的数量
+	pageSize := 5
 
 	goodsList := []models.Goods{}
-	models.DB.Find(&goodsList)
+	models.DB.Where(where).Offset((page - 1) * pageSize).Limit(pageSize).Find(&goodsList)
 
-	c.HTML(http.StatusOK, "admin/goods/index.html", gin.H{
-		"goodsList": goodsList,
-	})
+	//获取总数量
+	var count int64
+	models.DB.Where(where).Table("goods").Count(&count)
+
+	//判断最后一页有没有数据 如果没有跳转到第一页
+	if len(goodsList) > 0 {
+		c.HTML(http.StatusOK, "admin/goods/index.html", gin.H{
+			"goodsList": goodsList,
+			//注意float64类型
+			"totalPages": math.Ceil(float64(count) / float64(pageSize)),
+			"page":       page,
+			"keyword":    keyword,
+		})
+	} else {
+		if page != 1 {
+			c.Redirect(302, "/admin/goods")
+		} else {
+			c.HTML(http.StatusOK, "admin/goods/index.html", gin.H{
+				"goodsList": goodsList,
+				//注意float64类型
+				"totalPages": math.Ceil(float64(count) / float64(pageSize)),
+				"page":       page,
+				"keyword":    keyword,
+			})
+		}
+
+	}
+
 }
 func (con GoodsController) Add(c *gin.Context) {
 	//获取商品分类
@@ -43,6 +86,23 @@ func (con GoodsController) Add(c *gin.Context) {
 		"goodsColorList": goodsColorList,
 		"goodsTypeList":  goodsTypeList,
 	})
+}
+
+func (con GoodsController) GoodsTypeAttribute(c *gin.Context) {
+	cateId, err1 := models.Int(c.Query("cateId"))
+	goodsTypeAttributeList := []models.GoodsTypeAttribute{}
+	err2 := models.DB.Where("cate_id = ?", cateId).Find(&goodsTypeAttributeList).Error
+	if err1 != nil || err2 != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"success": false,
+			"result":  "",
+		})
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"success": true,
+			"result":  goodsTypeAttributeList,
+		})
+	}
 }
 
 func (con GoodsController) DoAdd(c *gin.Context) {
@@ -164,6 +224,8 @@ func (con GoodsController) DoAdd(c *gin.Context) {
 	wg.Wait()
 	con.Success(c, "增加数据成功", "/admin/goods")
 }
+
+// 修改
 func (con GoodsController) Edit(c *gin.Context) {
 
 	// 1、获取要修改的商品数据
@@ -232,6 +294,9 @@ func (con GoodsController) Edit(c *gin.Context) {
 		}
 	}
 
+	//获取上一页的地址
+	fmt.Println(c.Request.Referer())
+
 	c.HTML(http.StatusOK, "admin/goods/edit.html", gin.H{
 		"goods":          goods,
 		"goodsCateList":  goodsCateList,
@@ -239,9 +304,9 @@ func (con GoodsController) Edit(c *gin.Context) {
 		"goodsTypeList":  goodsTypeList,
 		"goodsAttrStr":   goodsAttrStr,
 		"goodsImageList": goodsImageList,
+		"prevPage":       c.Request.Referer(), //获取上一页的地址
 	})
 }
-
 func (con GoodsController) DoEdit(c *gin.Context) {
 
 	//1、获取表单提交过来的数据
@@ -249,6 +314,8 @@ func (con GoodsController) DoEdit(c *gin.Context) {
 	if err1 != nil {
 		con.Error(c, "传入参数错误", "/admin/goods")
 	}
+	//获取上一页的地址
+	prevPage := c.PostForm("prevPage")
 	title := c.PostForm("title")
 	subTitle := c.PostForm("sub_title")
 	goodsSn := c.PostForm("goods_sn")
@@ -365,26 +432,13 @@ func (con GoodsController) DoEdit(c *gin.Context) {
 		wg.Done()
 	}()
 	wg.Wait()
-	con.Success(c, "修改数据成功", "/admin/goods")
-}
-
-func (con GoodsController) GoodsTypeAttribute(c *gin.Context) {
-	cateId, err1 := models.Int(c.Query("cateId"))
-	goodsTypeAttributeList := []models.GoodsTypeAttribute{}
-	err2 := models.DB.Where("cate_id = ?", cateId).Find(&goodsTypeAttributeList).Error
-	if err1 != nil || err2 != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"success": false,
-			"result":  "",
-		})
+	if len(prevPage) > 0 {
+		con.Success(c, "修改数据成功", prevPage)
 	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"success": true,
-			"result":  goodsTypeAttributeList,
-		})
+		con.Success(c, "修改数据成功", "/admin/goods")
 	}
-}
 
+}
 func (con GoodsController) ImageUpload(c *gin.Context) {
 	//上传图片
 	imgDir, err := models.UploadImg(c, "file") //注意：可以在网络里面看到传递的参数
@@ -397,4 +451,72 @@ func (con GoodsController) ImageUpload(c *gin.Context) {
 			"link": "/" + imgDir,
 		})
 	}
+}
+
+// 修改商品图库关联的颜色
+func (con GoodsController) ChangeGoodsImageColor(c *gin.Context) {
+	//获取图片id 获取颜色id
+	goodsImageId, err1 := models.Int(c.Query("goods_image_id"))
+	colorId, err2 := models.Int(c.Query("color_id"))
+	goodsImage := models.GoodsImage{Id: goodsImageId}
+	models.DB.Find(&goodsImage)
+	goodsImage.ColorId = colorId
+	err3 := models.DB.Save(&goodsImage).Error
+	if err1 != nil || err2 != nil || err3 != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"result":  "更新失败",
+			"success": false,
+		})
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"result":  "更新成功",
+			"success": true,
+		})
+	}
+
+}
+
+// 删除图库
+func (con GoodsController) RemoveGoodsImage(c *gin.Context) {
+	//获取图片id
+	goodsImageId, err1 := models.Int(c.Query("goods_image_id"))
+	goodsImage := models.GoodsImage{Id: goodsImageId}
+	err2 := models.DB.Delete(&goodsImage).Error
+	if err1 != nil || err2 != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"result":  "删除失败",
+			"success": false,
+		})
+	} else {
+		//删除图片
+		// os.Remove()
+		c.JSON(http.StatusOK, gin.H{
+			"result":  "删除成功",
+			"success": true,
+		})
+	}
+
+}
+
+// 删除数据
+func (con GoodsController) Delete(c *gin.Context) {
+	id, err := models.Int(c.Query("id"))
+	if err != nil {
+		con.Error(c, "传入数据错误", "/admin/goods")
+	} else {
+		goods := models.Goods{Id: id}
+		models.DB.Find(&goods)
+		goods.IsDelete = 1
+		goods.Status = 0
+		models.DB.Save(&goods)
+		//获取上一页
+		prevPage := c.Request.Referer()
+		if len(prevPage) > 0 {
+			con.Success(c, "删除数据成功", prevPage)
+		} else {
+			con.Success(c, "删除数据成功", "/admin/goods")
+		}
+
+	}
+
 }
