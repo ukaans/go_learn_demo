@@ -6,120 +6,193 @@ import (
 	"fmt"
 	"html/template"
 	"io"
+	"mime/multipart"
 	"os"
 	"path"
+	"reflect"
 	"strconv"
+	"sync"
 	"time"
 
+	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"github.com/gin-gonic/gin"
+	"gopkg.in/ini.v1"
 )
 
-// 时间戳转换成日期
+// ========== 时间工具函数保持不变 ==========
+
 func UnixToTime(timestamp int) string {
 	t := time.Unix(int64(timestamp), 0)
 	return t.Format("2006-01-02 15:04:05")
 }
 
-// 日期转换成时间戳 2020-05-02 15:04:05
 func DateToUnix(str string) int64 {
-	template := "2006-01-02 15:04:05"
-	t, err := time.ParseInLocation(template, str, time.Local)
+	layout := "2006-01-02 15:04:05"
+	t, err := time.ParseInLocation(layout, str, time.Local)
 	if err != nil {
 		return 0
 	}
 	return t.Unix()
 }
 
-// 获取时间戳
-func GetUnix() int64 {
-	return time.Now().Unix()
-}
+func GetUnix() int64     { return time.Now().Unix() }
+func GetUnixNano() int64 { return time.Now().UnixNano() }
 
-// 获取纳秒
-func GetUnixNano() int64 {
-	return time.Now().UnixNano()
-}
-
-// 获取当前的日期
 func GetDate() string {
-	template := "2006-01-02 15:04:05"
-	return time.Now().Format(template)
+	return time.Now().Format("2006-01-02 15:04:05")
 }
 
-// 获取年月日
 func GetDay() string {
-	template := "20060102"
-	return time.Now().Format(template)
+	return time.Now().Format("20060102")
 }
 
-// md5加密
 func Md5(str string) string {
 	h := md5.New()
 	io.WriteString(h, str)
 	return fmt.Sprintf("%x", h.Sum(nil))
 }
 
-// 表示把string转换成int
-func Int(str string) (int, error) {
-	n, err := strconv.Atoi(str)
-	return n, err
+func Int(str string) (int, error)       { return strconv.Atoi(str) }
+func Float(str string) (float64, error) { return strconv.ParseFloat(str, 64) }
+func String(n int) string               { return strconv.Itoa(n) }
+func Str2Html(str string) template.HTML { return template.HTML(str) }
+
+var (
+	ossClient     *oss.Client
+	ossClientOnce sync.Once
+	ossInitErr    error
+)
+
+// 凭证从环境变量读取
+func getOssClient() (*oss.Client, error) {
+	ossClientOnce.Do(func() {
+		endpoint := os.Getenv("OSS_ENDPOINT")
+		accessKeyID := os.Getenv("OSS_ACCESS_KEY_ID")
+		accessKeySecret := os.Getenv("OSS_ACCESS_KEY_SECRET")
+
+		if endpoint == "" || accessKeyID == "" || accessKeySecret == "" {
+			ossInitErr = errors.New("OSS configuration missing: please set OSS_ENDPOINT, OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET environment variables")
+			return
+		}
+
+		ossClient, ossInitErr = oss.New(endpoint, accessKeyID, accessKeySecret)
+	})
+	return ossClient, ossInitErr
 }
 
-// 表示把string转换成Float64
-func Float(str string) (float64, error) {
-	n, err := strconv.ParseFloat(str, 64)
-	return n, err
+// OssUpload 上传文件到 OSS
+func OssUpload(file *multipart.FileHeader, dst string) (string, error) {
+	f, err := file.Open()
+	if err != nil {
+		return "", fmt.Errorf("failed to open upload file: %w", err)
+	}
+	defer f.Close()
+
+	client, err := getOssClient()
+	if err != nil {
+		return "", fmt.Errorf("OSS client init failed: %w", err)
+	}
+
+	bucketName := os.Getenv("OSS_BUCKET_NAME")
+	if bucketName == "" {
+		bucketName = "golearndemo"
+	}
+
+	bucket, err := client.Bucket(bucketName)
+	if err != nil {
+		return "", fmt.Errorf("failed to get OSS bucket: %w", err)
+	}
+
+	if err := bucket.PutObject(dst, f); err != nil {
+		return "", fmt.Errorf("failed to upload to OSS: %w", err)
+	}
+
+	return dst, nil
 }
 
-// 表示把int转换成string
-func String(n int) string {
-	str := strconv.Itoa(n)
-	return str
+func GetSettingFromColumn(columnName string) string {
+	setting := Setting{}
+	DB.First(&setting)
+	v := reflect.ValueOf(setting)
+	val := v.FieldByName(columnName).String()
+	return val
 }
 
-// 上传图片
+func GetOssStatus() int {
+	config, iniErr := ini.Load("./conf/app.ini")
+	if iniErr != nil {
+		fmt.Printf("Fail to read file: %v", iniErr)
+		os.Exit(1)
+	}
+	ossStatus, _ := Int(config.Section("oss").Key("status").String())
+	return ossStatus
+}
+
+func FormatImg(str string) string {
+	ossStatus := GetOssStatus()
+	if ossStatus == 1 {
+		return GetSettingFromColumn("") + str
+	}
+	return "/" + str
+}
+
 func UploadImg(c *gin.Context, picName string) (string, error) {
-	// 1、获取上传的文件
+	ossStatus := GetOssStatus()
+	if ossStatus == 1 {
+		return OssUploadImg(c, picName)
+	}
+	return LocalUploadImg(c, picName)
+}
+
+func OssUploadImg(c *gin.Context, picName string) (string, error) {
 	file, err := c.FormFile(picName)
 	if err != nil {
 		return "", err
 	}
 
-	// 2、获取后缀名 判断类型是否正确  .jpg .png .gif .jpeg
 	extName := path.Ext(file.Filename)
 	allowExtMap := map[string]bool{
-		".jpg":  true,
-		".png":  true,
-		".gif":  true,
-		".jpeg": true,
+		".jpg": true, ".png": true, ".gif": true, ".jpeg": true,
+	}
+	if _, ok := allowExtMap[extName]; !ok {
+		return "", errors.New("文件后缀名不合法")
+	}
+	day := GetDay()
+	dir := "static/upload/" + day
+	fileName := strconv.FormatInt(GetUnixNano(), 10) + extName
+	dst := path.Join(dir, fileName)
+
+	if _, err := OssUpload(file, dst); err != nil {
+		return "", err
+	}
+	return dst, nil
+}
+
+func LocalUploadImg(c *gin.Context, picName string) (string, error) {
+	file, err := c.FormFile(picName)
+	if err != nil {
+		return "", err
 	}
 
+	extName := path.Ext(file.Filename)
+	allowExtMap := map[string]bool{
+		".jpg": true, ".png": true, ".gif": true, ".jpeg": true,
+	}
 	if _, ok := allowExtMap[extName]; !ok {
 		return "", errors.New("文件后缀名不合法")
 	}
 
-	// 3、创建图片保存目录  static/upload/20210624
-
 	day := GetDay()
 	dir := "./static/upload/" + day
-
-	err1 := os.MkdirAll(dir, 0666)
-	if err1 != nil {
-		fmt.Println(err1)
-		return "", err1
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return "", err
 	}
 
-	// 4、生成文件名称和文件保存的目录   111111111111.jpeg
 	fileName := strconv.FormatInt(GetUnixNano(), 10) + extName
-
-	// 5、执行上传
 	dst := path.Join(dir, fileName)
-	c.SaveUploadedFile(file, dst)
+
+	if err := c.SaveUploadedFile(file, dst); err != nil {
+		return "", err
+	}
 	return dst, nil
-
-}
-
-// 把字符串解析成html
-func Str2Html(str string) template.HTML {
-	return template.HTML(str)
 }

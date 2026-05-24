@@ -1,6 +1,8 @@
 package itying
 
 import (
+	"fmt"
+	"goshopdemo/models"
 	"io/ioutil"
 
 	"github.com/gin-gonic/gin"
@@ -11,6 +13,7 @@ import (
 type DefaultController struct{}
 
 func (con DefaultController) Index(c *gin.Context) {
+	fmt.Println(models.GetSettingFromColumn("SiteTitle"))
 	c.String(200, "首页")
 
 }
