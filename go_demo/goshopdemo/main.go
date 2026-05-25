@@ -5,7 +5,6 @@ import (
 	"goshopdemo/routers"
 	"html/template"
 	"log"
-	"os"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
@@ -17,17 +16,11 @@ func main() {
 	// 创建一个默认的路由引擎
 	r := gin.Default()
 
-	if os.Getenv("GIN_MODE") != "release" {
-		if err := godotenv.Load(); err != nil {
-			log.Println("⚠️  .env file not found, using system environment variables")
-		}
-	}
-
 	//自定义模板函数  注意要把这个函数放在加载模板前
 	r.SetFuncMap(template.FuncMap{
 		"UnixToTime": models.UnixToTime,
 		"Str2Html":   models.Str2Html,
-		"formatImg":  models.FormatImg,
+		"FormatImg":  models.FormatImg,
 	})
 	//加载模板 放在配置路由前面
 	r.LoadHTMLGlob("templates/**/**/*")
@@ -46,4 +39,10 @@ func main() {
 	routers.DefaultRoutersInit(r)
 
 	r.Run()
+}
+
+func init() {
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found, relying on system environment variables")
+	}
 }

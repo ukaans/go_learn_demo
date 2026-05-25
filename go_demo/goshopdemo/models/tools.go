@@ -11,15 +11,16 @@ import (
 	"path"
 	"reflect"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"github.com/gin-gonic/gin"
-	"gopkg.in/ini.v1"
+	. "github.com/hunterhug/go_image"
 )
 
-// ========== 时间工具函数保持不变 ==========
+// ... 保留原有的时间、加密等工具函数 ...
 
 func UnixToTime(timestamp int) string {
 	t := time.Unix(int64(timestamp), 0)
@@ -63,7 +64,7 @@ var (
 	ossInitErr    error
 )
 
-// 凭证从环境变量读取
+// getOssClient 从环境变量读取 OSS 凭证并初始化客户端
 func getOssClient() (*oss.Client, error) {
 	ossClientOnce.Do(func() {
 		endpoint := os.Getenv("OSS_ENDPOINT")
@@ -95,7 +96,7 @@ func OssUpload(file *multipart.FileHeader, dst string) (string, error) {
 
 	bucketName := os.Getenv("OSS_BUCKET_NAME")
 	if bucketName == "" {
-		bucketName = "golearndemo"
+		bucketName = "golearndemo" // 默认 bucket 名称
 	}
 
 	bucket, err := client.Bucket(bucketName)
@@ -110,6 +111,7 @@ func OssUpload(file *multipart.FileHeader, dst string) (string, error) {
 	return dst, nil
 }
 
+// GetSettingFromColumn 从数据库 setting 表获取指定字段的值
 func GetSettingFromColumn(columnName string) string {
 	setting := Setting{}
 	DB.First(&setting)
@@ -118,14 +120,17 @@ func GetSettingFromColumn(columnName string) string {
 	return val
 }
 
+// GetOssStatus 从环境变量读取 OSS 开关状态（1 开启，0 关闭）
 func GetOssStatus() int {
-	config, iniErr := ini.Load("./conf/app.ini")
-	if iniErr != nil {
-		fmt.Printf("Fail to read file: %v", iniErr)
-		os.Exit(1)
+	statusStr := os.Getenv("OSS_STATUS")
+	if statusStr == "" {
+		return 1 // 默认关闭
 	}
-	ossStatus, _ := Int(config.Section("oss").Key("status").String())
-	return ossStatus
+	status, err := Int(statusStr)
+	if err != nil {
+		return 0
+	}
+	return status
 }
 
 func FormatImg(str string) string {
@@ -136,6 +141,7 @@ func FormatImg(str string) string {
 	return "/" + str
 }
 
+// UploadImg 根据 OSS 状态选择上传方式
 func UploadImg(c *gin.Context, picName string) (string, error) {
 	ossStatus := GetOssStatus()
 	if ossStatus == 1 {
@@ -195,4 +201,18 @@ func LocalUploadImg(c *gin.Context, picName string) (string, error) {
 		return "", err
 	}
 	return dst, nil
+}
+
+// ResizeGoodsImage 生成商品缩略图（保留原逻辑）
+func ResizeGoodsImage(filename string) {
+	extname := path.Ext(filename)
+	thumbnailSizeSlice := strings.Split(GetSettingFromColumn("ThumbnailSize"), ",")
+	for i := 0; i < len(thumbnailSizeSlice); i++ {
+		savepath := filename + "_" + thumbnailSizeSlice[i] + "x" + thumbnailSizeSlice[i] + extname
+		w, _ := Int(thumbnailSizeSlice[i])
+		err := ThumbnailF2F(filename, savepath, w, w)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
 }

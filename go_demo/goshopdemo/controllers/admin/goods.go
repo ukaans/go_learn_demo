@@ -143,7 +143,17 @@ func (con GoodsController) DoAdd(c *gin.Context) {
 
 	//3、上传图片   生成缩略图
 	goodsImg, _ := models.UploadImg(c, "goods_img")
+	if len(goodsImg) > 0 {
+		//判断 本地图片才需要处理
+		if models.GetOssStatus() != 1 {
+			wg.Add(1)
+			go func() {
+				models.ResizeGoodsImage(goodsImg)
+				wg.Done()
+			}()
+		}
 
+	}
 	//4、增加商品数据
 
 	goods := models.Goods{
@@ -375,6 +385,13 @@ func (con GoodsController) DoEdit(c *gin.Context) {
 	goodsImg, err2 := models.UploadImg(c, "goods_img")
 	if err2 == nil && len(goodsImg) > 0 {
 		goods.GoodsImg = goodsImg
+		if models.GetOssStatus() != 1 {
+			wg.Add(1)
+			go func() {
+				models.ResizeGoodsImage(goodsImg)
+				wg.Done()
+			}()
+		}
 	}
 
 	err3 := models.DB.Save(&goods).Error
@@ -447,6 +464,14 @@ func (con GoodsController) ImageUpload(c *gin.Context) {
 			"link": "",
 		})
 	} else {
+		if models.GetOssStatus() != 1 {
+			wg.Add(1)
+			go func() {
+				models.ResizeGoodsImage(imgDir)
+				wg.Done()
+			}()
+		}
+
 		c.JSON(http.StatusOK, gin.H{
 			"link": "/" + imgDir,
 		})
