@@ -80,7 +80,8 @@ func AdminRoutersInit(r *gin.Engine) {
 		adminRouters.GET("/goods/edit", admin.GoodsController{}.Edit)
 		adminRouters.POST("/goods/doEdit", admin.GoodsController{}.DoEdit)
 		adminRouters.GET("/goods/goodsTypeAttribute", admin.GoodsController{}.GoodsTypeAttribute)
-		adminRouters.POST("/goods/imageUpload", admin.GoodsController{}.ImageUpload)
+		adminRouters.POST("/goods/editorImageUpload", admin.GoodsController{}.EditorImageUpload)
+		adminRouters.POST("/goods/goodsImageUpload", admin.GoodsController{}.GoodsImageUpload)
 
 		adminRouters.GET("/nav", admin.NavController{}.Index)
 		adminRouters.GET("/nav/add", admin.NavController{}.Add)

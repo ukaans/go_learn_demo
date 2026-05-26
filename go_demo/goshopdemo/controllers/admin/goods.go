@@ -456,7 +456,9 @@ func (con GoodsController) DoEdit(c *gin.Context) {
 	}
 
 }
-func (con GoodsController) ImageUpload(c *gin.Context) {
+
+// 富文本编辑器上传图片
+func (con GoodsController) EditorImageUpload(c *gin.Context) {
 	//上传图片
 	imgDir, err := models.UploadImg(c, "file") //注意：可以在网络里面看到传递的参数
 	if err != nil {
@@ -470,11 +472,39 @@ func (con GoodsController) ImageUpload(c *gin.Context) {
 				models.ResizeGoodsImage(imgDir)
 				wg.Done()
 			}()
+			c.JSON(http.StatusOK, gin.H{
+				"link": "/" + imgDir,
+			})
+		} else {
+			c.JSON(http.StatusOK, gin.H{
+				"link": models.GetSettingFromColumn("OssDomain") + imgDir,
+			})
 		}
 
+	}
+}
+
+// 图库上传图片
+func (con GoodsController) GoodsImageUpload(c *gin.Context) {
+	//上传图片
+	imgDir, err := models.UploadImg(c, "file") //注意：可以在网络里面看到传递的参数
+	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
-			"link": "/" + imgDir,
+			"link": "",
 		})
+	} else {
+		if models.GetOssStatus() != 1 {
+			wg.Add(1)
+			go func() {
+				models.ResizeGoodsImage(imgDir)
+				wg.Done()
+			}()
+
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"link": imgDir,
+		})
+
 	}
 }
 
