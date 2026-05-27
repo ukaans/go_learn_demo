@@ -124,7 +124,7 @@ func GetSettingFromColumn(columnName string) string {
 func GetOssStatus() int {
 	statusStr := os.Getenv("OSS_STATUS")
 	if statusStr == "" {
-		return 1 // 默认关闭
+		return 0 // 默认关闭
 	}
 	status, err := Int(statusStr)
 	if err != nil {
@@ -206,7 +206,8 @@ func LocalUploadImg(c *gin.Context, picName string) (string, error) {
 // ResizeGoodsImage 生成商品缩略图（保留原逻辑）
 func ResizeGoodsImage(filename string) {
 	extname := path.Ext(filename)
-	thumbnailSizeSlice := strings.Split(GetSettingFromColumn("ThumbnailSize"), ",")
+	ThumbnailSize := strings.ReplaceAll(GetSettingFromColumn("ThumbnailSize"), "，", ",")
+	thumbnailSizeSlice := strings.Split(ThumbnailSize, ",")
 	for i := 0; i < len(thumbnailSizeSlice); i++ {
 		savepath := filename + "_" + thumbnailSizeSlice[i] + "x" + thumbnailSizeSlice[i] + extname
 		w, _ := Int(thumbnailSizeSlice[i])
@@ -215,4 +216,8 @@ func ResizeGoodsImage(filename string) {
 			fmt.Println(err)
 		}
 	}
+}
+
+func Sub(a int, b int) int {
+	return a - b
 }
