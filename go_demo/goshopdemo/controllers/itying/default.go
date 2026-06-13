@@ -38,11 +38,21 @@ func (con DefaultController) Index(c *gin.Context) {
 		middleNavList[i].GoodsItems = goodsList
 	}
 
+	//方舟工业
+
+	arkindustryList := models.GetGoodsByCategory(25, "best", 8)
+
+	//配件
+
+	otherList := models.GetGoodsByCategory(9, "all", 1)
+
 	c.HTML(http.StatusOK, "itying/index/index.html", gin.H{
-		"topNavList":    topNavList,
-		"focusList":     focusList,
-		"goodsCateList": goodsCateList,
-		"middleNavList": middleNavList,
+		"topNavList":      topNavList,
+		"focusList":       focusList,
+		"goodsCateList":   goodsCateList,
+		"middleNavList":   middleNavList,
+		"arkindustryList": arkindustryList,
+		"otherList":       otherList,
 	})
 
 }
