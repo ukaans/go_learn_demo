@@ -6,11 +6,8 @@ import (
 	"github.com/mojocn/base64Captcha"
 )
 
-//配置store
-// var store = base64Captcha.DefaultMemStore
-
-// 配置redisStore
-var store base64Captcha.Store = RedisStore{}
+// 配置store
+var store = base64Captcha.DefaultMemStore
 
 // 获取验证码
 func MakeCaptcha() (string, string, error) {

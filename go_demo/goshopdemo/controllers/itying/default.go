@@ -1,6 +1,7 @@
 package itying
 
 import (
+	"fmt"
 	"goshopdemo/models"
 	"net/http"
 	"strings"
@@ -15,7 +16,13 @@ type DefaultController struct{}
 func (con DefaultController) Index(c *gin.Context) {
 	//1、获取顶部导航
 	topNavList := []models.Nav{}
-	models.DB.Where("status=1 AND position=1").Find(&topNavList)
+	if hasTopNavList := models.CacheDb.Get("topNavList", &topNavList); !hasTopNavList {
+		models.DB.Where("status=1 AND position=1").Find(&topNavList)
+		models.CacheDb.Set("topNavList", topNavList, 60*60)
+		fmt.Println("数据库里面读取数据")
+	} else {
+		fmt.Println("redis里面读取数据")
+	}
 	//2、获取轮播图数据
 	focusList := []models.Focus{}
 	models.DB.Where("status=1 AND focus_type=1").Find(&focusList)
