@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"goshopdemo/controllers/itying"
+	"goshopdemo/controllers/front"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,7 +9,8 @@ import (
 func DefaultRoutersInit(r *gin.Engine) {
 	defaultRouters := r.Group("/")
 	{
-		defaultRouters.GET("/", itying.DefaultController{}.Index)
+		defaultRouters.GET("/", front.DefaultController{}.Index)
 
+		defaultRouters.GET("/category:id", front.ProductController{}.Category)
 	}
 }
