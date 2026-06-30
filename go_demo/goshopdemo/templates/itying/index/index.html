@@ -43,71 +43,72 @@
 <!-- end banner_x -->
 
 	<!-- start banner_y -->
-		<div class="banner_y center">
+	<div class="banner_y center">
 
 
-			<div class="nav">
-				<ul>
+		<div class="nav">
+			<ul>
+				
+			{{range $key,$value := .goodsCateList}}
+				<li>
 					
-				{{range $key,$value := .goodsCateList}}
-					<li>
-						
-												
-						{{if eq $value.Link ""}}
+											
+					{{if eq $value.Link ""}}
 						<a href="category{{$value.Id}}" target="_blank">{{$value.Title}}</a>	
-						{{else}}
-							<a href="{{$value.Link}}" target="_blank">{{$value.Title}}</a>
-						{{end}}
+					{{else}}
+						<a href="{{$value.Link}}" target="_blank">{{$value.Title}}</a>
+					{{end}}
 
-						<div class="pop">
-							<ol class="cate_list clear">
-										
-								{{range $k,$v := $value.GoodsCateItems}}
-									<li>										
-										<div class="xuangou_left">
-											{{if eq $v.Link ""}}
-												<a href="category{{$v.Id}}" target="_blank" class="clearfix">
-													<div class="img fl"><img src="{{$v.CateImg | FormatImg}}" alt="{{$v.Title}}"></div>
-													<span class="fl">{{$v.Title}}</span>									
-												</a>
-											{{else}}
-												<a href="{{$v.Link}}" target="_blank" class="clearfix">
-													<div class="img fl"><img src="{{$v.CateImg | FormatImg}}" alt="{{$v.Title}}"></div>
-													<span class="fl">{{$v.Title}}</span>									
-												</a>
-											{{end}}
-										</div>
-									</li>
+					<div class="pop">
+						<ol class="cate_list clear">
+									
+							{{range $k,$v := $value.GoodsCateItems}}
+								<li>
+									
+									<div class="xuangou_left">
+										{{if eq $v.Link ""}}
+											<a href="category{{$v.Id}}" target="_blank" class="clearfix">
+												<div class="img fl"><img src="{{$v.CateImg | FormatImg}}" alt="{{$v.Title}}"></div>
+												<span class="fl">{{$v.Title}}</span>									
+											</a>
+										{{else}}
+											<a href="{{$v.Link}}" target="_blank" class="clearfix">
+												<div class="img fl"><img src="{{$v.CateImg | FormatImg}}" alt="{{$v.Title}}"></div>
+												<span class="fl">{{$v.Title}}</span>									
+											</a>
+										{{end}}
+									</div>
+								</li>
+							
+							{{end}}				
+						</ol>
+					</div>
+					
+				</li>
+				{{end}}
+	
+			</ul>
+		</div>
+	
+			<div class="swiper-container">
+			<div class="swiper-wrapper">
+
+
+				{{range $key,$value := .focusList}}
+					<div class="swiper-slide">
+						<a href="{{$value.Link}}" target="_blank">
+							<img src="{{$value.FocusImg | FormatImg}}" alt="{{$value.Title}}" />
+						</a>
+					</div>
+				{{end}}
 								
-								{{end}}				
-							</ol>
-						</div>
-						
-					</li>
-					{{end}}
-		
-				</ul>
 			</div>
-		
-			  <div class="swiper-container">
-				<div class="swiper-wrapper">
-
-
-					{{range $key,$value := .focusList}}
-						<div class="swiper-slide">
-							<a href="{{$value.Link}}" target="_blank">
-								<img src="{{$value.FocusImg | FormatImg}}" alt="{{$value.Title}}" />
-							</a>
-						</div>
-					{{end}}
-				  				
-				</div>
-				<!-- Add Arrows -->
-				<div class="swiper-button-next"></div>
-				<div class="swiper-button-prev"></div>
-			  </div>
-		
-		</div>	
+			<!-- Add Arrows -->
+			<div class="swiper-button-next"></div>
+			<div class="swiper-button-prev"></div>
+			</div>
+	
+	</div>	
 
 		<div class="sub_banner center">
 			<div class="sidebar fl">

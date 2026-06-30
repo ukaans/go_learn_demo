@@ -68,4 +68,11 @@ func (c cacheDb) Get(key string, obj interface{}) bool {
 	return false
 }
 
+// 清除缓存
+func (c cacheDb) FlushAll() {
+	if redisEnable {
+		rdbClient.FlushAll(ctx)
+	}
+}
+
 var CacheDb = &cacheDb{}

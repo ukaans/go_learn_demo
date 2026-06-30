@@ -10,7 +10,9 @@ import (
 	"gorm.io/gorm"
 )
 
-type MainController struct{}
+type MainController struct {
+	BaseController
+}
 
 func (con MainController) Index(c *gin.Context) {
 
@@ -126,4 +128,10 @@ func (con MainController) ChangeNum(c *gin.Context) {
 		})
 	}
 
+}
+
+// 清除缓存
+func (con MainController) FlushAll(c *gin.Context) {
+	models.CacheDb.FlushAll()
+	con.Success(c, "清除Redis缓存数据成功", "/admin")
 }
