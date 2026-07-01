@@ -12,5 +12,7 @@ func DefaultRoutersInit(r *gin.Engine) {
 		defaultRouters.GET("/", front.DefaultController{}.Index)
 
 		defaultRouters.GET("/category:id", front.ProductController{}.Category)
+		defaultRouters.GET("/detail", front.ProductController{}.Detail)
+
 	}
 }
