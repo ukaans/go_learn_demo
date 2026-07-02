@@ -10,29 +10,18 @@
 <div class="jieshao mt20 w">
 	<div class="left fl">
 		<div class="swiper-container">
-			<div class="swiper-wrapper item_focus">
-				
-					
-				
+			<div class="swiper-wrapper item_focus" id="item_focus">
                 {{range $key,$value := .goodsImage}}
                     <div class="swiper-slide">
                         <img src="{{$value.ImgUrl | FormatImg}}" />
                     </div>
                 {{end}}
-                    
-
 			</div>
 
-			<div class="swiper-pagination"></div>
-
-			
+			<div class="swiper-pagination"></div>			
 			<div class="swiper-button-next"></div>
 			<div class="swiper-button-prev"></div>
-
 		</div>
-
-
-
 	</div>
 	<div class="right fr">
 		<div class="h3 ml20 mt20">{{.goods.Title}}</div>
@@ -54,25 +43,19 @@
 			
 		</div>
 		<div class="ft20 ml20 mt10">选择颜色</div>
-		<div class="xzbb ml20 mt10 clearfix">
-
-			
+		<div class="xzbb ml20 mt10 clearfix" id="color_list">			
             {{range $key,$value:=.goodsColor}}
-			<div class="banben fl">
-				<a>
-					<span class="yuandian" style="background:{{$value.ColorValue}}"></span>
-					<span class="yanse">{{$value.ColorName}}</span>
-				</a>
-			</div>
+				<div class="banben fl" goods_id="{{$goodsId}}" color_id="{{$value.Id}}">
+					<a>
+						<span class="yuandian" style="background:{{$value.ColorValue}}"></span>
+						<span class="yanse">{{$value.ColorName}}</span>
+					</a>
+				</div>
 			{{end}}
-			
-			
-			
-
 		</div>
 		<div class="xqxq mt10 ml20">
 			<div class="top1 mt10">
-				<div class="left1 fl">{{.goods.GoodsVersion}} <span>红色</span></div>
+				<div class="left1 fl">{{.goods.GoodsVersion}} <span id="color_name"></span></div>
 				<div class="right1 fr">{{.goods.Price}}元</div>
 				<div class="clear"></div>
 			</div>
@@ -80,9 +63,6 @@
 		</div>
 		<div class="xiadan ml20 mt10">
 			<input class="jrgwc" type="button" name="jrgwc" value="加入购物车" />
-
-
-
 		</div>
 	</div>
 	<div class="clear"></div>
@@ -91,8 +71,6 @@
 
 
 <div class="container clearfix">
-
-
 	<div class="c_left">
 
 		<h2>看了又看</h2>
@@ -101,7 +79,7 @@
 
 			<a target="_blank" href="#">
 
-				<img src="image/liebiao_hongmin4.jpg" />
+				<img src="/static/upload/20211117/1637139107685884400.jpg" />
 
 				<p class="price recommendLookPrice4183081">￥31.90</p>
 
@@ -115,7 +93,7 @@
 
 			<a target="_blank" href="#">
 
-				<img src="image/liebiao_hongmin4.jpg" />
+				<img src="/static/upload/20211117/1637139107685884400.jpg" />
 
 				<p class="price recommendLookPrice4183081">￥31.90</p>
 
@@ -129,7 +107,7 @@
 
 			<a target="_blank" href="#">
 
-				<img src="image/liebiao_hongmin4.jpg" />
+				<img src="/static/upload/20211117/1637139107685884400.jpg" />
 
 				<p class="price recommendLookPrice4183081">￥31.90</p>
 
@@ -255,19 +233,6 @@
 
 
 </div>
-
-<script>
-	$(function () {
-		$('.detail_info .detail_info_item:first').addClass('active');
-		$('.detail_list li:first').addClass('active');
-		$('.detail_list li').click(function () {
-			var index = $(this).index();
-			$(this).addClass('active').siblings().removeClass('active');
-			$('.detail_info .detail_info_item').removeClass('active').eq(index).addClass('active');
-
-		})
-	})
-</script>
 
 {{ template "itying/public/page_footer.html" .}}
 
