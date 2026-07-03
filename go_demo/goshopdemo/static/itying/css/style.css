@@ -438,6 +438,7 @@ header .top .right ul li.userinfo ol li a:hover{
 	margin-right: 5px;
 	margin-bottom: 5px;
 	border:1px solid #e0e0e0;
+	text-align: center;
 }
 .jieshao .right .xzbb .banben a{
 	display:block;

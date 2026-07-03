@@ -10,6 +10,8 @@
             this.initProductContentTab();
 
             this.initProductContentColor();
+
+            this.initProductContentAttr();
         },
         initSwiper:function(){    
             new Swiper('.swiper-container', {
@@ -34,17 +36,17 @@
              })          
 
         },
-        initProductContentTab:function(){
-            $(function () {
-                $('.detail_info .detail_info_item:first').addClass('active');
-                $('.detail_list li:first').addClass('active');
-                $('.detail_list li').click(function () {
-                    var index = $(this).index();
-                    $(this).addClass('active').siblings().removeClass('active');
-                    $('.detail_info .detail_info_item').removeClass('active').eq(index).addClass('active');
+        initProductContentTab: function(){
+            // 默认激活第一个
+            $('.detail_info .detail_info_item:first').addClass('active');
+            $('.detail_list li:first').addClass('active');
         
-                })
-            })
+            // Tab 点击切换
+            $('.detail_list li').click(function () {
+                var index = $(this).index();
+                $(this).addClass('active').siblings().removeClass('active');
+                $('.detail_info .detail_info_item').removeClass('active').eq(index).addClass('active');
+            });
         },
         initProductContentColor:function(){
             var _that=this;
@@ -68,7 +70,25 @@
                     }
                 })
             })
-        }   
+        },
+        initProductContentAttr: function() {
+            var _that = this;
+            // 为所有属性组的 .banben 添加点击事件
+            $(".xzbb:not(#color_list) .banben").each(function() {
+                var $banben = $(this);
+                // 默认选中第一个
+                if ($banben.index() === 0) {
+                    $banben.addClass("active");
+                }
+                $banben.click(function() {
+                    // 同组内互斥
+                    $(this).addClass("active").siblings(".banben").removeClass("active");
+                });
+            });
+            // 初始化时更新一次已选信息
+            this.updateSelectedInfo();
+        },
+           
     }   
     
     $(function(){

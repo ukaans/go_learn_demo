@@ -17,6 +17,7 @@ import (
 
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"github.com/gin-gonic/gin"
+	"github.com/gomarkdown/markdown"
 	. "github.com/hunterhug/go_image"
 )
 
@@ -245,4 +246,16 @@ func Substr(str string, start int, end int) string {
 
 	return string(rs[start:end])
 
+}
+
+func FormatAttr(str string) string {
+
+	tempSlice := strings.Split(str, "\n")
+	var tempStr string
+	for _, v := range tempSlice {
+		md := []byte(v)
+		output := markdown.ToHTML(md, nil, nil)
+		tempStr += string(output)
+	}
+	return tempStr
 }

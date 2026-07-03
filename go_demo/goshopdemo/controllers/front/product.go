@@ -48,7 +48,12 @@ func (con ProductController) Category(c *gin.Context) {
 	var count int64
 	models.DB.Where(where, tempSlice).Table("goods").Count(&count)
 
+	//自定义模板
 	tpl := "itying/product/list.html"
+	if currentCate.Template != "" {
+		tpl = currentCate.Template
+	}
+
 	con.Render(c, tpl, gin.H{
 		"page":        page,
 		"goodsList":   goodsList,
@@ -106,6 +111,24 @@ func (con ProductController) Detail(c *gin.Context) {
 	goodsAttr := []models.GoodsAttr{}
 	models.DB.Where("goods_id=?", goods.Id).Find(&goodsAttr)
 
+	//8、获取更多属性
+	goodsAttrStr := goods.GoodsAttr
+	goodsAttrStr = strings.ReplaceAll(goodsAttrStr, "，", ",")
+	goodsAttrStr = strings.ReplaceAll(goodsAttrStr, "：", ":")
+
+	var goodsItemAttrList []models.GoodsItemAttr
+	if strings.Contains(goodsAttrStr, ":") {
+		goodsAttrStrSlice := strings.Split(goodsAttrStr, "|")
+		//创建切片的存储空间
+		goodsItemAttrList = make([]models.GoodsItemAttr, len(goodsAttrStrSlice))
+		for i := 0; i < len(goodsAttrStrSlice); i++ {
+			tempSlice := strings.Split(goodsAttrStrSlice[i], ":")
+			goodsItemAttrList[i].Cate = tempSlice[0]
+			listSlice := strings.Split(tempSlice[1], ",")
+			goodsItemAttrList[i].List = listSlice
+		}
+	}
+
 	// c.String(200, "Detail")
 	tpl := "itying/product/detail.html"
 	fmt.Println("111111")
@@ -113,13 +136,14 @@ func (con ProductController) Detail(c *gin.Context) {
 	fmt.Println(colorIds)
 
 	con.Render(c, tpl, gin.H{
-		"goods":         goods,
-		"relationGoods": relationGoods,
-		"goodsGift":     goodsGift,
-		"goodsColor":    goodsColor,
-		"goodsFitting":  goodsFitting,
-		"goodsImage":    goodsImage,
-		"goodsAttr":     goodsAttr,
+		"goods":             goods,
+		"relationGoods":     relationGoods,
+		"goodsGift":         goodsGift,
+		"goodsColor":        goodsColor,
+		"goodsFitting":      goodsFitting,
+		"goodsImage":        goodsImage,
+		"goodsAttr":         goodsAttr,
+		"goodsItemAttrList": goodsItemAttrList,
 	})
 }
 

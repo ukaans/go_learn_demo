@@ -1,4 +1,3 @@
-
 {{ define "itying/product/detail.html" }}
 
 {{ template "itying/public/page_header.html" .}}
@@ -11,14 +10,14 @@
 	<div class="left fl">
 		<div class="swiper-container">
 			<div class="swiper-wrapper item_focus" id="item_focus">
-                {{range $key,$value := .goodsImage}}
-                    <div class="swiper-slide">
-                        <img src="{{$value.ImgUrl | FormatImg}}" />
-                    </div>
-                {{end}}
+				{{range $key,$value := .goodsImage}}
+				<div class="swiper-slide">
+					<img src="{{$value.ImgUrl | FormatImg}}" />
+				</div>
+				{{end}}
 			</div>
 
-			<div class="swiper-pagination"></div>			
+			<div class="swiper-pagination"></div>
 			<div class="swiper-button-next"></div>
 			<div class="swiper-button-prev"></div>
 		</div>
@@ -27,32 +26,57 @@
 		<div class="h3 ml20 mt20">{{.goods.Title}}</div>
 		<div class="jianjie mr40 ml20 mt10">{{.goods.SubTitle}}</div>
 		<div class="jiage ml20 mt10">{{.goods.Price}}元 　<span class="old_price">{{.goods.MarketPrice}}元</span></div>
-		<div class="ft20 ml20 mt20">选择版本</div>
-		<div class="xzbb ml20 mt10 clearfix">
-					
-            {{$goodsId := .goods.Id}}
-			{{range $key,$value := .relationGoods}}
-			<div class="banben fl {{if eq $value.Id $goodsId}}active{{end}}">
-				<a href="detail?id={{$value.Id}}">
-					<span>{{$value.GoodsVersion}}</span>
-					<span>{{$value.Price}}元</span>
-				</a>
-			</div>
-			{{end}}
-			
-			
-		</div>
-		<div class="ft20 ml20 mt10">选择颜色</div>
-		<div class="xzbb ml20 mt10 clearfix" id="color_list">			
-            {{range $key,$value:=.goodsColor}}
-				<div class="banben fl" goods_id="{{$goodsId}}" color_id="{{$value.Id}}">
-					<a>
-						<span class="yuandian" style="background:{{$value.ColorValue}}"></span>
-						<span class="yanse">{{$value.ColorName}}</span>
+		{{$goodsId := .goods.Id}}
+		{{$relationGoodsLen := len .relationGoods}}
+		{{if gt $relationGoodsLen 0}}
+			<div class="ft20 ml20 mt20">选择版本</div>
+			<div class="xzbb ml20 mt10 clearfix">
+
+				{{range $key,$value := .relationGoods}}
+				<div class="banben fl {{if eq $value.Id $goodsId}}active{{end}}">
+					<a href="detail?id={{$value.Id}}">
+						<span>{{$value.GoodsVersion}}</span>
+						<span>{{$value.Price}}元</span>
 					</a>
 				</div>
-			{{end}}
-		</div>
+				{{end}}
+
+
+			</div>
+		{{end}}
+
+
+		{{$goodsColorLen := len .goodsColor}}
+		{{if gt $relationGoodsLen 0}}
+			<div class="ft20 ml20 mt10">选择颜色</div>
+			<div class="xzbb ml20 mt10 clearfix" id="color_list">
+				{{range $key,$value:=.goodsColor}}
+				<div class="banben fl" goods_id="{{$goodsId}}" color_id="{{$value.Id}}">
+					
+						<span class="yuandian" style="background:{{$value.ColorValue}}"></span>
+						<span class="yanse">{{$value.ColorName}}</span>
+					
+				</div>
+				{{end}}
+			</div>
+		{{end}}
+
+
+		{{$goodsItemAttrListLen := len .goodsItemAttrList}}
+		{{if gt $goodsItemAttrListLen 0}}
+				{{range $key,$value := .goodsItemAttrList}}		
+					<div class="ft20 ml20 mt20">{{$value.Cate}}</div>
+					<div class="xzbb ml20 mt10 clearfix">
+						{{range $k,$v := $value.List}}
+						<div class="banben fl">							
+								<span>{{$v}}</span>															
+						</div>
+						{{end}}
+
+					</div>
+				{{end}}
+
+		{{end}}
 		<div class="xqxq mt10 ml20">
 			<div class="top1 mt10">
 				<div class="left1 fl">{{.goods.GoodsVersion}} <span id="color_name"></span></div>
@@ -134,48 +158,30 @@
 		<div class="detail_info">
 
 			<div class="detail_info_item">
-                {{Str2Html .goods.GoodsContent}}
+				{{Str2Html .goods.GoodsContent}}
 			</div>
 			<div class="detail_info_item">
 				<ul>
 
+					{{range $key,$value:=.goodsAttr}}
+
+					{{if ne $value.AttributeValue ""}}
 					<li class="row clearfix">
 
 						<div class="span5">
 
-							<h2>充电与电池</h2>
+							<h2>{{$value.AttributeTitle}}</h2>
 						</div>
 
 						<div class="span15">
 
-							有线充电支持 QC 4.0+ 快充<br>
-							USB Type-C 双面充电接口<br>
-							内置电池，免更换<br>
-							标配 18W QC3.0 充电器 &amp; 附赠 10W 无线充电器
+							{{$value.AttributeValue | FormatAttr | Str2Html}}
 						</div>
 
 
 					</li>
-
-
-					<li class="row clearfix">
-
-						<div class="span5">
-
-							<h2>充电与电池</h2>
-						</div>
-
-						<div class="span15">
-
-							有线充电支持 QC 4.0+ 快充<br>
-							USB Type-C 双面充电接口<br>
-							内置电池，免更换<br>
-							标配 18W QC3.0 充电器 &amp; 附赠 10W 无线充电器
-						</div>
-
-
-					</li>
-
+					{{end}}
+					{{end}}
 				</ul>
 			</div>
 

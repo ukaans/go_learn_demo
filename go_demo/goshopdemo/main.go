@@ -23,6 +23,7 @@ func main() {
 		"FormatImg":  models.FormatImg,
 		"Sub":        models.Sub,
 		"Substr":     models.Substr,
+		"FormatAttr": models.FormatAttr,
 	})
 	//加载模板 放在配置路由前面
 	r.LoadHTMLGlob("templates/**/**/*")
