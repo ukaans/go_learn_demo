@@ -73,19 +73,31 @@
         },
         initProductContentAttr: function() {
             var _that = this;
-            // 为所有属性组的 .banben 添加点击事件
+            
             $(".xzbb:not(#color_list) .banben").each(function() {
                 var $banben = $(this);
-                // 默认选中第一个
+                
                 if ($banben.index() === 0) {
                     $banben.addClass("active");
                 }
+                
                 $banben.click(function() {
-                    // 同组内互斥
                     $(this).addClass("active").siblings(".banben").removeClass("active");
+                    _that.updateSelectedInfo();
                 });
             });
-            // 初始化时更新一次已选信息
+        
+            // 修复：定义缺失的方法
+            this.updateSelectedInfo = function() {
+                // TODO: 这里可以实现右侧价格、版本、颜色同步更新
+                console.log("[updateSelectedInfo] 已执行");
+                
+                // 示例：同步颜色名称（颜色部分已经在 initProductContentColor 里处理了）
+                var colorName = $("#color_list .active .yanse").html() || "";
+                $("#color_name").html(colorName);
+            };
+        
+            // 初始化调用
             this.updateSelectedInfo();
         },
            

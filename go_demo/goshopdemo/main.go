@@ -22,6 +22,7 @@ func main() {
 		"Str2Html":   models.Str2Html,
 		"FormatImg":  models.FormatImg,
 		"Sub":        models.Sub,
+		"Mul":        models.Mul,
 		"Substr":     models.Substr,
 		"FormatAttr": models.FormatAttr,
 	})

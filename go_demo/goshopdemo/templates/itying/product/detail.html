@@ -23,10 +23,10 @@
 		</div>
 	</div>
 	<div class="right fr">
-		<div class="h3 ml20 mt20">{{.goods.Title}}</div>
+		{{$goodsId := .goods.Id}}
+		<div class="h3 ml20 mt20" id="title" goods_id="{{$goodsId}}">{{.goods.Title}}</div>
 		<div class="jianjie mr40 ml20 mt10">{{.goods.SubTitle}}</div>
 		<div class="jiage ml20 mt10">{{.goods.Price}}元 　<span class="old_price">{{.goods.MarketPrice}}元</span></div>
-		{{$goodsId := .goods.Id}}
 		{{$relationGoodsLen := len .relationGoods}}
 		{{if gt $relationGoodsLen 0}}
 			<div class="ft20 ml20 mt20">选择版本</div>
@@ -64,6 +64,7 @@
 
 		{{$goodsItemAttrListLen := len .goodsItemAttrList}}
 		{{if gt $goodsItemAttrListLen 0}}
+			
 				{{range $key,$value := .goodsItemAttrList}}		
 					<div class="ft20 ml20 mt20">{{$value.Cate}}</div>
 					<div class="xzbb ml20 mt10 clearfix">
@@ -86,7 +87,7 @@
 			<div class="bot mt20 ft20 ftbc">总计：{{.goods.Price}}元</div>
 		</div>
 		<div class="xiadan ml20 mt10">
-			<input class="jrgwc" type="button" name="jrgwc" value="加入购物车" />
+			<input class="jrgwc" type="button" id="addCart" name="jrgwc" value="加入购物车" />
 		</div>
 	</div>
 	<div class="clear"></div>
@@ -239,6 +240,21 @@
 
 
 </div>
+
+<script>
+	$(function () {	
+	
+		$('#addCart').click(function () {	
+	
+			var goods_id = $('#title').attr('goods_id');
+	
+			var color_id = $('#color_list .active').attr('color_id');
+	
+			location.href = "/cart/addCart?goods_id=" + goods_id + '&color_id=' + color_id;	
+	
+		})
+	})
+	</script>
 
 {{ template "itying/public/page_footer.html" .}}
 

@@ -223,6 +223,10 @@ func Sub(a int, b int) int {
 	return a - b
 }
 
+func Mul(price float64, num int) float64 {
+	return price * float64(num)
+}
+
 // Substr截取字符串
 func Substr(str string, start int, end int) string {
 	rs := []rune(str)
