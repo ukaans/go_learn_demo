@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"html/template"
 	"io"
+	"math/rand"
 	"mime/multipart"
 	"os"
 	"path"
@@ -262,4 +263,17 @@ func FormatAttr(str string) string {
 		tempStr += string(output)
 	}
 	return tempStr
+}
+
+//生成随机数
+
+func GetRandomNum() string {
+	var str string
+
+	for i := 0; i < 4; i++ {
+		current := rand.Intn(10)
+
+		str += String(current)
+	}
+	return str
 }

@@ -26,5 +26,13 @@ func DefaultRoutersInit(r *gin.Engine) {
 		defaultRouters.GET("/cart/changeAllCart", front.CartController{}.ChangeAllCart)
 		defaultRouters.GET("/cart/delCart", front.CartController{}.DelCart)
 
+		defaultRouters.GET("/pass/login", front.PassController{}.Login)
+		defaultRouters.GET("/pass/captcha", front.PassController{}.Captcha)
+
+		defaultRouters.GET("/pass/registerStep1", front.PassController{}.RegisterStep1)
+		defaultRouters.GET("/pass/registerStep2", front.PassController{}.RegisterStep2)
+		defaultRouters.GET("/pass/registerStep3", front.PassController{}.RegisterStep3)
+		defaultRouters.GET("/pass/sendCode", front.PassController{}.SendCode)
+
 	}
 }
