@@ -5,6 +5,7 @@
             this.deleteConfirm();
             this.initCheckBox();
             this.isCheckedAll();
+            this.initChekOut();
         },
         deleteConfirm:function(){
             $('.delete').click(function(){    
@@ -100,7 +101,19 @@
                 })
 
             });
-        }
+        },
+        initChekOut(){
+            $(function(){	
+                    $("#checkout").click(function(){	
+                        var allPrice=parseFloat($("#allPrice").html());	
+                        if(allPrice==0){
+                            alert('购物车没有选中去结算的商品')
+                        }else{
+                            location.href="/buy/checkout";
+                        }	
+                    })
+            })
+        },
     }
 
     $(function(){

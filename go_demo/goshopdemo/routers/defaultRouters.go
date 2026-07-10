@@ -2,6 +2,7 @@ package routers
 
 import (
 	"goshopdemo/controllers/front"
+	"goshopdemo/middlewares"
 
 	"github.com/gin-gonic/gin"
 )
@@ -37,6 +38,13 @@ func DefaultRoutersInit(r *gin.Engine) {
 		defaultRouters.POST("/pass/doRegister", front.PassController{}.DoRegister)
 		defaultRouters.POST("/pass/doLogin", front.PassController{}.DoLogin)
 		defaultRouters.GET("/pass/loginOut", front.PassController{}.LoginOut)
+		//判断用户权限
+		defaultRouters.GET("/buy/checkout", middlewares.InitUserAuthMiddleware, front.BuyController{}.Checkout)
+
+		defaultRouters.POST("/address/addAddress", middlewares.InitUserAuthMiddleware, front.AddressController{}.AddAddress)
+		defaultRouters.POST("/address/editAddress", middlewares.InitUserAuthMiddleware, front.AddressController{}.EditAddress)
+		defaultRouters.GET("/address/changeDefaultAddress", middlewares.InitUserAuthMiddleware, front.AddressController{}.ChangeDefaultAddress)
+		defaultRouters.GET("/address/getOneAddressList", middlewares.InitUserAuthMiddleware, front.AddressController{}.GetOneAddressList)
 
 	}
 }

@@ -140,6 +140,7 @@
 				var password= $('#password').val();			
 				var captchaId = $('#captchaId').val();
 				var captchaVal = $("#captchaVal").val();
+				var prevPage = $("#prevPage").val();
 				var reg =/^[\d]{11}$/;
 				if(!reg.test(phone)){
 					$(".error").html('Error:手机号输入错误');					
@@ -157,8 +158,12 @@
 				//ajax请求	 														
 				$.post('/pass/doLogin',{phone:phone,password:password,captchaVal:captchaVal,captchaId:captchaId},function(response){							
 					console.log(response);
-					if(response.success==true){
-						location.href="/";
+					if(response.success==true){						
+						if(prevPage == ""){
+							location.href="/";
+						}else{
+							location.href=prevPage;
+						}
 					}else{															
 						$(".error").html("Error：" + response.message + ",请重新输入!")
 						//改变验证码	

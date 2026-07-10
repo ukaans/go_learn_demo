@@ -50,9 +50,9 @@ func (con BaseController) Render(c *gin.Context, tpl string, data map[string]int
 	//4、获取Cookie里面保存的用户信息
 
 	user := models.User{}
-	models.Cookie.Get(c, "userinfo", &user)
+	isLogin := models.Cookie.Get(c, "userinfo", &user)
 	var userinfo string
-	if len(user.Phone) == 11 {
+	if isLogin && len(user.Phone) == 11 {
 		userinfo = fmt.Sprintf(`<li class="userinfo">
 			<a href="#">%v</a>		
 
@@ -66,9 +66,9 @@ func (con BaseController) Render(c *gin.Context, tpl string, data map[string]int
 			</ol>								
 		</li> `, user.Phone)
 	} else {
-		userinfo = fmt.Sprintf(`<li><a href="/pass/login" target="_blank">登录</a></li>
+		userinfo = fmt.Sprintf(`<li><a href="/pass/login">登录</a></li>
 		<li>|</li>
-		<li><a href="/pass/registerStep1" target="_blank" >注册</a></li>
+		<li><a href="/pass/registerStep1" >注册</a></li>
 		<li>|</li>`)
 	}
 
