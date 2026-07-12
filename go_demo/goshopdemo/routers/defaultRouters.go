@@ -40,6 +40,8 @@ func DefaultRoutersInit(r *gin.Engine) {
 		defaultRouters.GET("/pass/loginOut", front.PassController{}.LoginOut)
 		//判断用户权限
 		defaultRouters.GET("/buy/checkout", middlewares.InitUserAuthMiddleware, front.BuyController{}.Checkout)
+		defaultRouters.POST("/buy/doCheckout", middlewares.InitUserAuthMiddleware, front.BuyController{}.DoCheckout)
+		defaultRouters.GET("/buy/pay", middlewares.InitUserAuthMiddleware, front.BuyController{}.Pay)
 
 		defaultRouters.POST("/address/addAddress", middlewares.InitUserAuthMiddleware, front.AddressController{}.AddAddress)
 		defaultRouters.POST("/address/editAddress", middlewares.InitUserAuthMiddleware, front.AddressController{}.EditAddress)

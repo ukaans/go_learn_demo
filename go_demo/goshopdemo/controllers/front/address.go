@@ -155,5 +155,23 @@ func (con AddressController) ChangeDefaultAddress(c *gin.Context) {
 	   2、更新当前用户的所有收货地址的默认收货地址状态为0
 	   3、更新当前收货地址的默认收货地址状态为1
 	*/
-	c.String(200, " 修改默认的收货地址")
+
+	user := models.User{}
+	models.Cookie.Get(c, "userinfo", &user)
+	addressId, err := models.Int(c.Query("addressId"))
+	if err != nil {
+		c.JSON(200, gin.H{
+			"success": false,
+			"message": "传入参数错误",
+		})
+		return
+	}
+	models.DB.Table("address").Where("uid = ?", user.Id).Updates(map[string]interface{}{"default_address": 0})
+
+	models.DB.Table("address").Where("uid = ? AND id = ?", user.Id, addressId).Updates(map[string]interface{}{"default_address": 1})
+
+	c.JSON(200, gin.H{
+		"success": true,
+		"message": "修改数据成功",
+	})
 }
