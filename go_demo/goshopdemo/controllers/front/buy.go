@@ -3,6 +3,7 @@ package front
 import (
 	"goshopdemo/models"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
@@ -35,11 +36,24 @@ func (con BuyController) Checkout(c *gin.Context) {
 	addressList := []models.Address{}
 	models.DB.Where("uid = ?", user.Id).Order("id desc").Find(&addressList)
 
+	//3、生成签名
+	orderSign := models.Md5(models.GetRandomNum())
+	session := sessions.Default(c)
+	session.Set("orderSign", orderSign)
+	session.Save()
+
+	//4、判断orderList数据是否存在
+	if len(orderList) == 0 {
+		c.Redirect(302, "/")
+		return
+	}
+
 	con.Render(c, "itying/buy/checkout.html", gin.H{
 		"orderList":   orderList,
 		"allPrice":    allPrice,
 		"allNum":      allNum,
 		"addressList": addressList,
+		"orderSign":   orderSign,
 	})
 
 }
@@ -54,6 +68,23 @@ func (con BuyController) Checkout(c *gin.Context) {
 	5、跳转到支付页面
 */
 func (con BuyController) DoCheckout(c *gin.Context) {
+	//0、防止重复提交订单
+	orderSignClient := c.PostForm("orderSign")
+	session := sessions.Default(c)
+	orderSignSession := session.Get("orderSign")
+	orderSignServer, ok := orderSignSession.(string)
+	if !ok {
+		c.Redirect(302, "/")
+		return
+	}
+
+	if orderSignClient != orderSignServer {
+		c.Redirect(302, "/")
+		return
+	}
+	session.Delete("orderSign")
+	session.Save()
+
 	// 1、获取用户信息 获取用户的收货地址信息
 	user := models.User{}
 	models.Cookie.Get(c, "userinfo", &user)
@@ -115,10 +146,33 @@ func (con BuyController) DoCheckout(c *gin.Context) {
 	}
 	models.Cookie.Set(c, "cartList", noSelectCartList)
 
-	c.Redirect(302, "/buy/pay")
+	c.Redirect(302, "/buy/pay?orderId="+models.String(order.Id))
 }
 
 // 支付
 func (con BuyController) Pay(c *gin.Context) {
-	c.String(200, "支付页面")
+
+	orderId, err := models.Int(c.Query("orderId"))
+	if err != nil {
+		c.Redirect(302, "/")
+	}
+	//获取用户信息
+	user := models.User{}
+	models.Cookie.Get(c, "userinfo", &user)
+	//获取订单信息
+	order := models.Order{}
+	models.DB.Where("id = ?", orderId).Find(&order)
+	if order.Uid != user.Id {
+		c.Redirect(302, "/")
+		return
+	}
+	//获取订单对应的商品
+
+	orderItems := []models.OrderItem{}
+	models.DB.Where("order_id = ?", orderId).Find(&orderItems)
+
+	con.Render(c, "itying/buy/pay.html", gin.H{
+		"order":      order,
+		"orderItems": orderItems,
+	})
 }
