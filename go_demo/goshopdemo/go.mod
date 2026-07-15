@@ -15,6 +15,10 @@ require (
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/redis/go-redis/v9 v9.18.0 // indirect
+	github.com/smartwalle/alipay v1.0.2 // indirect
+	github.com/smartwalle/ncrypto v1.0.4 // indirect
+	github.com/smartwalle/ngx v1.1.1 // indirect
+	github.com/smartwalle/nsign v1.0.9 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	golang.org/x/image v0.39.0 // indirect
 	golang.org/x/time v0.15.0 // indirect
@@ -55,6 +59,8 @@ require (
 	github.com/quic-go/qpack v0.6.0 // indirect
 	github.com/quic-go/quic-go v0.59.0 // indirect
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
+	github.com/smartwalle/alipay/v2 v2.0.12
+	github.com/smartwalle/alipay/v3 v3.2.30
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.3.1 // indirect
 	go.mongodb.org/mongo-driver/v2 v2.5.0 // indirect

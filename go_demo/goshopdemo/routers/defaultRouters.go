@@ -48,5 +48,8 @@ func DefaultRoutersInit(r *gin.Engine) {
 		defaultRouters.GET("/address/changeDefaultAddress", middlewares.InitUserAuthMiddleware, front.AddressController{}.ChangeDefaultAddress)
 		defaultRouters.GET("/address/getOneAddressList", middlewares.InitUserAuthMiddleware, front.AddressController{}.GetOneAddressList)
 
+		defaultRouters.GET("/user", middlewares.InitUserAuthMiddleware, front.UserController{}.Index)
+		defaultRouters.GET("/user/order", middlewares.InitUserAuthMiddleware, front.UserController{}.OrderList)
+		defaultRouters.GET("/user/orderinfo", middlewares.InitUserAuthMiddleware, front.UserController{}.OrderInfo)
 	}
 }

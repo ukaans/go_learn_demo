@@ -72,11 +72,14 @@ func (con BaseController) Render(c *gin.Context, tpl string, data map[string]int
 		<li>|</li>`)
 	}
 
+	// 获取Url访问的地址   /admin/captcha?t=0.8706946438889653
+	pathname := strings.Split(c.Request.URL.String(), "?")[0]
 	renderData := gin.H{
 		"topNavList":    topNavList,
 		"goodsCateList": goodsCateList,
 		"middleNavList": middleNavList,
 		"userinfo":      userinfo,
+		"pathname":      pathname,
 	}
 	for key, v := range data {
 		renderData[key] = v
