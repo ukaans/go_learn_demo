@@ -1,7 +1,7 @@
 package models
 
 type Order struct {
-	d                int
+	Id               int
 	OrderId          string
 	Uid              int
 	AllPrice         float64

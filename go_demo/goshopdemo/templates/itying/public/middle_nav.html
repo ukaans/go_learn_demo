@@ -1,7 +1,7 @@
 {{ define "itying/public/middle_nav.html" }}
 <!-- 中间导航start banner_x -->
 <div class="banner_x center">
-    <a href="/" target="_blank">
+    <a href="/" >
         <div class="logo fl"></div>
     </a>
 
@@ -67,7 +67,7 @@
 
             {{range $key,$value := .middleNavList}}
             <li>
-                <a href="#" target="_blank">{{$value.Title}}</a>
+                <a href="#" >{{$value.Title}}</a>
                 <ol class="children-list clearfix">
                     {{range $k,$v := $value.GoodsItems}}
                     <li>
@@ -87,7 +87,7 @@
     <div class="search fr">
         <form action="" method="post">
             <div class="text fl">
-                <input type="text" class="shuru" placeholder="小米6&nbsp;小米MIX现货">
+                <input type="text" class="shuru" placeholder="龙泡泡&nbsp;锦草饮饮">
             </div>
             <div class="submit fl">
                 <input type="submit" class="sousuo" value="搜索" />

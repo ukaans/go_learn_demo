@@ -1,6 +1,7 @@
 package front
 
 import (
+	"fmt"
 	"goshopdemo/models"
 	"math"
 
@@ -12,7 +13,13 @@ type UserController struct {
 }
 
 func (con UserController) Index(c *gin.Context) {
-	// c.String(http.StatusOK, "首页")
+	fmt.Println("=== User Index 被执行了 ===")
+	fmt.Println("Request URL:", c.Request.URL.String())
+
+	user := models.User{}
+	isLogin := models.Cookie.Get(c, "userinfo", &user)
+	fmt.Println("是否登录:", isLogin, "Phone:", user.Phone)
+
 	var tpl = "itying/user/welcome.html"
 	con.Render(c, tpl, gin.H{})
 }

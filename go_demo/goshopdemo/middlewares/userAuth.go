@@ -14,5 +14,5 @@ func InitUserAuthMiddleware(c *gin.Context) {
 		c.Redirect(302, "/pass/login")
 		return
 	}
-
+	c.Next()
 }
