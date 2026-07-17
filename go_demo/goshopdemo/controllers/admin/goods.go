@@ -34,7 +34,7 @@ func (con GoodsController) Index(c *gin.Context) {
 	// is_delete=0 AND title like "%小米%"
 
 	//每页查询的数量
-	pageSize := 5
+	pageSize := 20
 
 	goodsList := []models.Goods{}
 	models.DB.Where(where).Offset((page - 1) * pageSize).Limit(pageSize).Find(&goodsList)

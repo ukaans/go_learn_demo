@@ -34,11 +34,11 @@ func (con DefaultController) Index(c *gin.Context) {
 
 	//4、获取中间导航 挪到了base.go里面
 
-	//手机
-	phoneList := []models.Goods{}
-	if hasPhoneList := models.CacheDb.Get("phoneList", &phoneList); !hasPhoneList {
-		phoneList = models.GetGoodsByCategory(1, "best", 8)
-		models.CacheDb.Set("phoneList", phoneList, 60*60)
+	//方舟工业
+	arkindustryList := []models.Goods{}
+	if hasArkindustryList := models.CacheDb.Get("arkindustryList", &arkindustryList); !hasArkindustryList {
+		arkindustryList = models.GetGoodsByCategory(25, "all", 8)
+		models.CacheDb.Set("arkindustryList", arkindustryList, 60*60)
 	}
 
 	//配件
@@ -53,8 +53,8 @@ func (con DefaultController) Index(c *gin.Context) {
 	fmt.Printf("执行时间：%v 毫秒", (timeEnd-timeStart)/1000000)
 
 	con.Render(c, "itying/index/index.html", gin.H{
-		"focusList": focusList,
-		"phoneList": phoneList,
-		"otherList": otherList,
+		"focusList":       focusList,
+		"arkindustryList": arkindustryList,
+		"otherList":       otherList,
 	})
 }
