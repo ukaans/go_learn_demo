@@ -41,11 +41,11 @@ func (con DefaultController) Index(c *gin.Context) {
 		models.CacheDb.Set("arkindustryList", arkindustryList, 60*60)
 	}
 
-	//配件
-	otherList := []models.Goods{}
-	if hasOtherList := models.CacheDb.Get("otherList", &otherList); !hasOtherList {
-		otherList = models.GetGoodsByCategory(9, "all", 1)
-		models.CacheDb.Set("otherList", otherList, 60*60)
+	//终末地工业
+	endfieldList := []models.Goods{}
+	if hasEndfieldList := models.CacheDb.Get("endfieldList", &endfieldList); !hasEndfieldList {
+		endfieldList = models.GetGoodsByCategory(23, "all", 8)
+		models.CacheDb.Set("endfieldList", endfieldList, 60*60)
 	}
 
 	timeEnd := time.Now().UnixNano()
@@ -55,6 +55,6 @@ func (con DefaultController) Index(c *gin.Context) {
 	con.Render(c, "itying/index/index.html", gin.H{
 		"focusList":       focusList,
 		"arkindustryList": arkindustryList,
-		"otherList":       otherList,
+		"endfieldList":    endfieldList,
 	})
 }
