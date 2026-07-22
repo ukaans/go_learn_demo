@@ -23,7 +23,7 @@ func (con ProductController) Category(c *gin.Context) {
 		page = 1
 	}
 	//每一页显示的数量
-	pageSize := 5
+	pageSize := 20
 	//获取当前分类
 	currentCate := models.GoodsCate{}
 	models.DB.Where("id=?", cateId).Find(&currentCate)

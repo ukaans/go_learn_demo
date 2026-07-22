@@ -538,3 +538,32 @@ header .top .right ul li.userinfo ol li a:hover{
 .grzxbj .selfinfo .rtcont .ddxq .ztxx ul li a:hover{color:#ff6700;}
 /*footer*/
 footer{width: 100%;height: 120px;line-height: 30px;text-align: center;font-size: 12px;background: rgb(250,250,250);padding:30px 0;}
+
+.goods-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+	gap: 20px 15px;
+	max-width: 1250px;
+	margin: 0 auto;
+	padding-bottom: 30px;
+	min-height: 500px;           /* 防止内容太少时被挤压 */
+}
+
+.goods-grid .mingxing {
+	text-align: center;
+	width: 230px;
+	margin: 0 auto;
+}
+
+/* 分页样式 */
+.pagination {
+	margin-top: 30px;
+	text-align: right;
+}
+
+/* Footer 距离 */
+footer.mt40 {
+	margin-top: 60px !important;
+	padding-top: 20px;
+	border-top: 1px solid #f0f0f0;
+}

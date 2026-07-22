@@ -12,23 +12,28 @@ type CartController struct {
 }
 
 func (con CartController) Get(c *gin.Context) {
-	//获取购物车数据 显示购物车数据
+	//获取购物车数据
 	cartList := []models.Cart{}
 	models.Cookie.Get(c, "cartList", &cartList)
 
 	var allPrice float64
+	totalCount := len(cartList) // 总商品记录数
+	selectedCount := 0          // 已选商品数量
 
 	for i := 0; i < len(cartList); i++ {
 		if cartList[i].Checked {
 			allPrice += cartList[i].Price * float64(cartList[i].Num)
+			selectedCount++ // 统计已选中的记录
 		}
 	}
+
 	var tpl = "itying/cart/cart.html"
 	con.Render(c, tpl, gin.H{
-		"cartList": cartList,
-		"allPrice": allPrice,
+		"cartList":      cartList,
+		"allPrice":      allPrice,
+		"totalCount":    totalCount,    // 新增
+		"selectedCount": selectedCount, // 新增
 	})
-
 }
 
 func (con CartController) AddCart(c *gin.Context) {
@@ -129,18 +134,17 @@ func (con CartController) AddCartSuccess(c *gin.Context) {
 
 // 增加购物车数量
 func (con CartController) IncCart(c *gin.Context) {
-	//1、获取客户端穿过来的数据
 	goodsId, err := models.Int(c.Query("goods_id"))
 	goodsColor := c.Query("goods_color")
 	GoodsAttr := ""
 
-	//定义返回的数据
 	var allPrice float64
 	var currentPrice float64
 	var num int
+	var selectedCount int
 
 	var response gin.H
-	//2、判断数据是否合法
+
 	if err != nil {
 		response = gin.H{
 			"success": false,
@@ -149,6 +153,7 @@ func (con CartController) IncCart(c *gin.Context) {
 	} else {
 		cartList := []models.Cart{}
 		models.Cookie.Get(c, "cartList", &cartList)
+
 		if len(cartList) > 0 {
 			for i := 0; i < len(cartList); i++ {
 				if cartList[i].Id == goodsId && cartList[i].GoodsColor == goodsColor && cartList[i].GoodsAttr == GoodsAttr {
@@ -159,18 +164,20 @@ func (con CartController) IncCart(c *gin.Context) {
 
 				if cartList[i].Checked {
 					allPrice += cartList[i].Price * float64(cartList[i].Num)
+					selectedCount++
 				}
-
 			}
-			//重新写入数据
+
 			models.Cookie.Set(c, "cartList", cartList)
 
 			response = gin.H{
-				"success":      true,
-				"message":      "更新数据成功",
-				"allPrice":     allPrice,
-				"num":          num,
-				"currentPrice": currentPrice,
+				"success":       true,
+				"message":       "更新数据成功",
+				"allPrice":      allPrice,
+				"num":           num,
+				"currentPrice":  currentPrice,
+				"totalCount":    len(cartList),
+				"selectedCount": selectedCount,
 			}
 		} else {
 			response = gin.H{
@@ -181,23 +188,21 @@ func (con CartController) IncCart(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, response)
-
 }
 
 // 减少购物车数量
 func (con CartController) DecCart(c *gin.Context) {
-	//1、获取客户端穿过来的数据
 	goodsId, err := models.Int(c.Query("goods_id"))
 	goodsColor := c.Query("goods_color")
 	GoodsAttr := ""
 
-	//定义返回的数据
 	var allPrice float64
 	var currentPrice float64
 	var num int
+	var selectedCount int
 
 	var response gin.H
-	//2、判断数据是否合法
+
 	if err != nil {
 		response = gin.H{
 			"success": false,
@@ -206,6 +211,7 @@ func (con CartController) DecCart(c *gin.Context) {
 	} else {
 		cartList := []models.Cart{}
 		models.Cookie.Get(c, "cartList", &cartList)
+
 		if len(cartList) > 0 {
 			for i := 0; i < len(cartList); i++ {
 				if cartList[i].Id == goodsId && cartList[i].GoodsColor == goodsColor && cartList[i].GoodsAttr == GoodsAttr {
@@ -218,18 +224,20 @@ func (con CartController) DecCart(c *gin.Context) {
 
 				if cartList[i].Checked {
 					allPrice += cartList[i].Price * float64(cartList[i].Num)
+					selectedCount++
 				}
-
 			}
-			//重新写入数据
+
 			models.Cookie.Set(c, "cartList", cartList)
 
 			response = gin.H{
-				"success":      true,
-				"message":      "更新数据成功",
-				"allPrice":     allPrice,
-				"num":          num,
-				"currentPrice": currentPrice,
+				"success":       true,
+				"message":       "更新数据成功",
+				"allPrice":      allPrice,
+				"num":           num,
+				"currentPrice":  currentPrice,
+				"totalCount":    len(cartList),
+				"selectedCount": selectedCount,
 			}
 		} else {
 			response = gin.H{
@@ -244,16 +252,15 @@ func (con CartController) DecCart(c *gin.Context) {
 
 // 改变一个数据的选中状态
 func (con CartController) ChangeOneCart(c *gin.Context) {
-	//1、获取客户端传过来的数据
 	goodsId, err := models.Int(c.Query("goods_id"))
 	goodsColor := c.Query("goods_color")
 	GoodsAttr := ""
 
-	//定义返回的数据
 	var allPrice float64
+	var selectedCount int
 
 	var response gin.H
-	//2、判断数据是否合法
+
 	if err != nil {
 		response = gin.H{
 			"success": false,
@@ -262,6 +269,7 @@ func (con CartController) ChangeOneCart(c *gin.Context) {
 	} else {
 		cartList := []models.Cart{}
 		models.Cookie.Get(c, "cartList", &cartList)
+
 		if len(cartList) > 0 {
 			for i := 0; i < len(cartList); i++ {
 				if cartList[i].Id == goodsId && cartList[i].GoodsColor == goodsColor && cartList[i].GoodsAttr == GoodsAttr {
@@ -270,16 +278,18 @@ func (con CartController) ChangeOneCart(c *gin.Context) {
 
 				if cartList[i].Checked {
 					allPrice += cartList[i].Price * float64(cartList[i].Num)
+					selectedCount++
 				}
-
 			}
-			//重新写入数据
+
 			models.Cookie.Set(c, "cartList", cartList)
 
 			response = gin.H{
-				"success":  true,
-				"message":  "更新数据成功",
-				"allPrice": allPrice,
+				"success":       true,
+				"message":       "更新数据成功",
+				"allPrice":      allPrice,
+				"totalCount":    len(cartList),
+				"selectedCount": selectedCount,
 			}
 		} else {
 			response = gin.H{
@@ -294,16 +304,16 @@ func (con CartController) ChangeOneCart(c *gin.Context) {
 
 // 全选反选
 func (con CartController) ChangeAllCart(c *gin.Context) {
-
 	flag, _ := models.Int(c.Query("flag"))
 
-	//定义返回的数据
 	var allPrice float64
+	var selectedCount int
 
 	var response gin.H
 
 	cartList := []models.Cart{}
 	models.Cookie.Get(c, "cartList", &cartList)
+
 	if len(cartList) > 0 {
 		for i := 0; i < len(cartList); i++ {
 			if flag == 1 {
@@ -311,18 +321,21 @@ func (con CartController) ChangeAllCart(c *gin.Context) {
 			} else {
 				cartList[i].Checked = false
 			}
+
 			if cartList[i].Checked {
 				allPrice += cartList[i].Price * float64(cartList[i].Num)
+				selectedCount++
 			}
-
 		}
-		//重新写入数据
+
 		models.Cookie.Set(c, "cartList", cartList)
 
 		response = gin.H{
-			"success":  true,
-			"message":  "更新数据成功",
-			"allPrice": allPrice,
+			"success":       true,
+			"message":       "更新数据成功",
+			"allPrice":      allPrice,
+			"totalCount":    len(cartList),
+			"selectedCount": selectedCount,
 		}
 	} else {
 		response = gin.H{

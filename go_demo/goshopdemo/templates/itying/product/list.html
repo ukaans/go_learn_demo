@@ -1,74 +1,66 @@
 {{ define "itying/product/list.html" }}
 
 {{ template "itying/public/page_header.html" .}}
-
 {{ template "itying/public/middle_nav.html" .}}
 
 <script type="text/javascript" src="/static/admin/js/jqPaginator.js"></script>
 <link rel="stylesheet" href="/static/admin/bootstrap/css/bootstrap.css">
-	<!-- start banner_y -->
-	<!-- end banner -->
 
-	<!-- start danpin -->
-		<div class="danpin center">
+	<div class="danpin center">
 			
-			<div class="search-filter center">
-				<ul class="item show-less" id="list_item_class">
-					<span> 分类： </span>					
-					{{$currentId := .currentCate.Id}}
-					{{range $key,$value := .subCate}}
-						{{if eq $value.Link ""}}	
-							{{if eq $currentId $value.Id}}							
-								<li><a  class="active" href="category{{$value.Id}}">{{$value.Title}}</a></li>						
-							{{else}}
-								<li><a  href="category{{$value.Id}}">{{$value.Title}}</a></li>						
-							{{end}}
+		<div class="search-filter center">
+			<ul class="item show-less" id="list_item_class">
+				<span> 分类： </span>					
+				{{$currentId := .currentCate.Id}}
+				{{range $key,$value := .subCate}}
+					{{if eq $value.Link ""}}	
+						{{if eq $currentId $value.Id}}							
+							<li><a class="active" href="category{{$value.Id}}">{{$value.Title}}</a></li>						
 						{{else}}
-							<li><a  href="{{$value.Link}}" target="_blank">{{$value.Title}}</a></li>						
+							<li><a href="category{{$value.Id}}">{{$value.Title}}</a></li>						
 						{{end}}
+					{{else}}
+						<li><a href="{{$value.Link}}" target="_blank">{{$value.Title}}</a></li>						
 					{{end}}
-				</ul>
-			</div>
+				{{end}}
+			</ul>
+		</div>
 	
-			<div class="main center mb20">			
-
+		<div class="main center mb20">			
+			<!-- 商品网格 -->
+			<div class="goods-grid">
 				{{range $key,$value := .goodsList}}
-				<div class="mingxing fl mb20" style="border:2px solid #fff;width:230px;cursor:pointer;"
-					onmouseout="this.style.border='2px solid #fff'" onmousemove="this.style.border='2px solid red'">
+				<div class="mingxing">
 					<div class="sub_mingxing">
 						<a href="detail?id={{$value.Id}}" target="_blank">				
 							<img src="{{$value.GoodsImg | FormatImg}}" alt="{{$value.Title}}" />
 						</a>
 					</div>
 					<div class="pinpai"><a href="#" target="_blank">{{$value.Title}}</a></div>
-		
 					<div class="jiage">{{$value.Price}}元</div>
 				</div>
 				{{end}}
-				
-				
 			</div>
-			<div class="clear"></div>
 
-			<div id="pagination" class="pagination fr">
-			</div>		
+			<!-- 分页按钮 - 放在商品下方 -->
+			<div id="pagination" class="pagination fr mt30"></div>		
 		</div>
-		
 
-		<footer class="mt20 center">			
-			<div class="mt20">---泰拉商城|MIUI|塔聊|但书书城|伊冯路由器|视频电话|方舟太阳售货部|方舟泰拉直营店|塔卫网盟|泰拉移动|隐私政策|Select Region</div>
-			<div>©ying.com 泰ICP证325799号 泰ICP备114514号 泰公网安备3280000000号 泰网文[1045]0059-0009号</div> 
-			<div>违法和不良信息举报电话：185-0130-1238，本网站所列数据，除特殊说明，所有数据均出自罗德岛实验室测试</div>
+		<div class="clear"></div>
+	</div>
+
+	<!-- Footer -->
+	<footer class="mt60 center">			
+		<div class="mt20">---泰拉商城|MIUI|塔聊|但书书城|伊冯路由器|视频电话|方舟太阳售货部|方舟泰拉直营店|塔卫网盟|泰拉移动|隐私政策|Select Region</div>
+		<div>©ying.com 泰ICP证325799号 泰ICP备114514号 泰公网安备3280000000号 泰网文[1045]0059-0009号</div> 
+		<div>违法和不良信息举报电话：185-0130-1238，本网站所列数据，除特殊说明，所有数据均出自罗德岛实验室测试</div>
 	</footer>
 
-	<!-- end danpin -->
-
 	<script>
-
 		$(function(){
 			$('#pagination').jqPaginator({
 				totalPages: {{.totalPages}},
-				visiblePages: 10,
+				visiblePages: 12,
 				currentPage: {{.page}},
 				onPageChange: function (num, type) {				 
 				   if(type=="change"){
@@ -79,7 +71,7 @@
 		})
 	</script>
 	
-	</body>
+</body>
 </html>
 
 {{end}}

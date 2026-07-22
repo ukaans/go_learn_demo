@@ -71,3 +71,20 @@
 .gwcxqbj .gwcxd .content2 .sub_content{
     width: auto;
 }
+
+/* 让结算栏更稳固 */
+.jiesuandan {
+    background: #fff;
+    padding: 15px 0;
+    margin-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+/* 让 "共X件商品" 那行内容和结算按钮在同一水平线附近 */
+.tishi ul {
+    margin-top: 8px;
+}
+
+.jiesuan {
+    margin-top: 5px;
+}
