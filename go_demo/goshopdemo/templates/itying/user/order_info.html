@@ -27,7 +27,7 @@
 									<span class="tag tag-subsidy"></span>
 								</h2>
 								<div class="actions">
-									<a title="申请售后" href="http://service.order.mi.com/apply/order/id/1160529723001145" class="btn btn-small btn-line-gray" data-stat-id="12e905752ea93db8" onclick="_msq.push(['trackEvent', '4a854694de3347de-12e905752ea93db8', 'http://service.order.mi.com/apply/order/id/1160529723001145', 'pcpid', '']);">申请售后</a>
+									<a title="申请售后" href="https://www.hypergryph.com/" class="btn btn-small btn-line-gray" data-stat-id="12e905752ea93db8" onclick="_msq.push(['trackEvent', '4a854694de3347de-12e905752ea93db8', 'http://service.order.mi.com/apply/order/id/1160529723001145', 'pcpid', '']);">申请售后</a>
 								</div>
 							</div>
 						</div>
@@ -58,34 +58,34 @@
 											<ol class="progress-list clearfix progress-list-5">
 												<li class="step step-first {{if ge .order.OrderStatus 0}}step-done{{end}}">
 													<div class="progress"><span class="text">下单</span></div>
-													<div class="info">2022年01月29日 18:45</div>
+													<div class="info">799年03月25日 07:99</div>
 												</li>
 												<li class="step {{if ge .order.OrderStatus 1}}step-done{{end}}">
 													<div class="progress"><span class="text">付款</span></div>
-													<div class="info">2022年01月29日 18:49</div>
+													<div class="info">799年03月25日 07:99</div>
 												</li>
 												<li class="step {{if ge .order.OrderStatus 2}}step-done{{end}}">
 													<div class="progress"><span class="text">已配货</span></div>
-													<div class="info">2022年01月29日 18:59</div>
+													<div class="info">799年03月25日 07:99</div>
 												</li>
 												<li class="step {{if ge .order.OrderStatus 3}}step-done{{end}}">
 													<div class="progress"><span class="text">已发货</span></div>
-													<div class="info">2022年01月30日 17:50</div>
+													<div class="info">799年03月25日 07:99</div>
 												</li>
 												{{if eq .order.OrderStatus 4}}
 												<li class="step {{if eq .order.OrderStatus 4}}step-done{{end}} step-active step-last">
 													<div class="progress"><span class="text">交易成功</span></div>
-													<div class="info">2022年02月04日 13:58</div>
+													<div class="info">799年03月25日 07:99</div>
 												</li>
 												{{else if eq .order.OrderStatus 5}}
 												<li class="step {{if eq .order.OrderStatus 5}}step-done{{end}} step-active step-last">
 													<div class="progress"><span class="text">已退货</span></div>
-													<div class="info">2022年02月04日 13:58</div>
+													<div class="info">799年03月25日 07:99</div>
 												</li>
 												{{else if eq .order.OrderStatus 6}}
 												<li class="step {{if eq .order.OrderStatus 6}}step-done{{end}} step-active step-last">
 													<div class="progress"><span class="text">已取消</span></div>
-													<div class="info">2022年02月04日 13:58</div>
+													<div class="info">799年03月25日 07:99</div>
 												</li>
 												{{else}}
 												<li class="step  step-active step-last">
@@ -99,9 +99,9 @@
 										<div class="order-delivery order-delivery-detail" style="display:block;border:none;">
 											<p class="delivery-num">
 												物流公司：
-												<a href="http://www.sf-express.com" target="_blank" data-stat-id="d4af14ade0c175da" >顺丰(北京) </a>
+												<a href="http://www.sf-express.com" target="_blank" data-stat-id="d4af14ade0c175da" >企鹅物流（泰拉） </a>
 
-												运单号：199384067236
+												运单号：32579936888
 											</p>
 
 										</div>
@@ -225,11 +225,7 @@
 </div>
 <!-- self_info -->
 
-<footer class="mt20 center">
-	<div class="mt20">小米商城|MIUI|米聊|多看书城|小米路由器|视频电话|小米天猫店|小米淘宝直营店|小米网盟|小米移动|隐私政策|Select Region</div>
-	<div>©mi.com 京ICP证110507号 京ICP备10046444号 京公网安备11010802020134号 京网文[2014]0059-0009号</div>
-	<div>违法和不良信息举报电话：185-0130-1238，本网站所列数据，除特殊说明，所有数据均出自我司实验室测试</div>
-</footer>
+{{ template "itying/public/page_footer.html" .}}
 </body>
 
 </html>

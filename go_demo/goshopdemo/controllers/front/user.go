@@ -1,7 +1,6 @@
 package front
 
 import (
-	"fmt"
 	"goshopdemo/models"
 	"math"
 
@@ -13,15 +12,39 @@ type UserController struct {
 }
 
 func (con UserController) Index(c *gin.Context) {
-	fmt.Println("=== User Index 被执行了 ===")
-	fmt.Println("Request URL:", c.Request.URL.String())
 
 	user := models.User{}
-	isLogin := models.Cookie.Get(c, "userinfo", &user)
-	fmt.Println("是否登录:", isLogin, "Phone:", user.Phone)
+	models.Cookie.Get(c, "userinfo", &user)
 
-	var tpl = "itying/user/welcome.html"
-	con.Render(c, tpl, gin.H{})
+	if user.Id == 0 {
+		c.Redirect(302, "/")
+		return
+	}
+
+	// 处理手机号脱敏
+	phoneMask := "未绑定"
+	if len(user.Phone) >= 11 {
+		phoneMask = user.Phone[0:3] + "****" + user.Phone[7:11]
+	}
+
+	// 查询待支付订单数量
+	var waitPayCount int64
+	models.DB.Model(&models.Order{}).
+		Where("uid = ? AND pay_status = 0", user.Id).
+		Count(&waitPayCount)
+
+	// 查询待收货订单数量
+	var waitReceiveCount int64
+	models.DB.Model(&models.Order{}).
+		Where("uid = ? AND order_status = 3", user.Id).
+		Count(&waitReceiveCount)
+
+	con.Render(c, "itying/user/welcome.html", gin.H{
+		"user":             user,
+		"phoneMask":        phoneMask,
+		"waitPayCount":     waitPayCount,
+		"waitReceiveCount": waitReceiveCount,
+	})
 }
 func (con UserController) OrderList(c *gin.Context) {
 	// 当前页
@@ -79,6 +102,7 @@ func (con UserController) OrderList(c *gin.Context) {
 		"totalPages":  math.Ceil(float64(count) / float64(pageSize)),
 	})
 }
+
 func (con UserController) OrderInfo(c *gin.Context) {
 
 	id, err := models.Int(c.Query("id"))

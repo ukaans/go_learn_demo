@@ -42,6 +42,9 @@ func DefaultRoutersInit(r *gin.Engine) {
 		defaultRouters.GET("/buy/checkout", middlewares.InitUserAuthMiddleware, front.BuyController{}.Checkout)
 		defaultRouters.POST("/buy/doCheckout", middlewares.InitUserAuthMiddleware, front.BuyController{}.DoCheckout)
 		defaultRouters.GET("/buy/pay", middlewares.InitUserAuthMiddleware, front.BuyController{}.Pay)
+		defaultRouters.GET("/buy/confirm", middlewares.InitUserAuthMiddleware, front.BuyController{}.Confirm)
+		defaultRouters.GET("/buy/paySuccess", middlewares.InitUserAuthMiddleware, front.BuyController{}.PaySuccess)
+		defaultRouters.GET("/buy/ship", middlewares.InitUserAuthMiddleware, front.BuyController{}.Ship)
 
 		defaultRouters.POST("/address/addAddress", middlewares.InitUserAuthMiddleware, front.AddressController{}.AddAddress)
 		defaultRouters.POST("/address/editAddress", middlewares.InitUserAuthMiddleware, front.AddressController{}.EditAddress)

@@ -38,8 +38,6 @@ func main() {
 
 	routers.AdminRoutersInit(r)
 
-	routers.ApiRoutersInit(r)
-
 	routers.DefaultRoutersInit(r)
 
 	r.Run()
