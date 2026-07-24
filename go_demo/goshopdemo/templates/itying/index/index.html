@@ -1,0 +1,271 @@
+{{ define "itying/index/index.html" }}
+
+{{ template "itying/public/page_header.html" .}}
+
+<!-- 中间导航start banner_x -->
+<div class="banner_x center">
+    <a href="/" ><div class="logo fl"></div></a>
+    <a href=""><div class="ad_top fl"></div></a>
+    <div class="nav fl">
+        <ul class="clearfix" id="nav_list">
+            {{range $key,$value := .middleNavList}}
+            <li>
+                <a href="#" >{{$value.Title}}</a>					
+                <ol class="children-list clearfix">							
+                    {{range $k,$v := $value.GoodsItems}}
+                        <li>
+                            <a href="#">
+                                <img src="{{$v.GoodsImg | FormatImg}}" alt="{{$v.Title}}" />
+                                <p>{{$v.Price}}元</p>
+                            </a>
+                        </li>
+                    {{end}}		
+                </ol>
+            
+            </li>
+            {{end}}
+            
+        </ul>
+    </div>
+    <div class="search fr">
+        <form action="" method="post">
+            <div class="text fl">
+                <input type="text" class="shuru"  placeholder="龙泡泡&nbsp;锦草饮饮">
+            </div>
+            <div class="submit fl">
+                <input type="submit" class="sousuo" value="搜索"/>
+            </div>
+            <div class="clear"></div>
+        </form>
+        <div class="clear"></div>
+    </div>
+</div>
+<!-- end banner_x -->
+
+	<!-- start banner_y -->
+	<div class="banner_y center">
+
+
+		<div class="nav">
+			<ul>
+				
+			{{range $key,$value := .goodsCateList}}
+				<li>
+					
+											
+					{{if eq $value.Link ""}}
+						<a href="category{{$value.Id}}" >{{$value.Title}}</a>	
+					{{else}}
+						<a href="{{$value.Link}}" >{{$value.Title}}</a>
+					{{end}}
+
+					<div class="pop">
+						<ol class="cate_list clear">
+									
+							{{range $k,$v := $value.GoodsCateItems}}
+								<li>
+									
+									<div class="xuangou_left">
+										{{if eq $v.Link ""}}
+											<a href="category{{$v.Id}}"  class="clearfix">
+												<div class="img fl"><img src="{{$v.CateImg | FormatImg}}" alt="{{$v.Title}}"></div>
+												<span class="fl">{{$v.Title}}</span>									
+											</a>
+										{{else}}
+											<a href="{{$v.Link}}"  class="clearfix">
+												<div class="img fl"><img src="{{$v.CateImg | FormatImg}}" alt="{{$v.Title}}"></div>
+												<span class="fl">{{$v.Title}}</span>									
+											</a>
+										{{end}}
+									</div>
+								</li>
+							
+							{{end}}				
+						</ol>
+					</div>
+					
+				</li>
+				{{end}}
+	
+			</ul>
+		</div>
+	
+			<div class="swiper-container">
+			<div class="swiper-wrapper">
+
+
+				{{range $key,$value := .focusList}}
+					<div class="swiper-slide">
+						<a href="{{$value.Link}}" >
+							<img src="{{$value.FocusImg | FormatImg}}" alt="{{$value.Title}}" />
+						</a>
+					</div>
+				{{end}}
+								
+			</div>
+			<!-- Add Arrows -->
+			<div class="swiper-button-next"></div>
+			<div class="swiper-button-prev"></div>
+			</div>
+	
+	</div>	
+
+		<div class="sub_banner center">
+			<div class="sidebar fl" style="background-color: #191919; 
+                                           min-height: 230px;          /* 原高度 + 347px，建议从380px开始调 */
+                                           text-align: center; 
+                                         ">
+    
+				<div class="fl" style="display: inline-block; margin: 0 8px;">
+						<a href=""><img src="./static/itying/image/weibo.png" alt=""></a>
+				</div>
+				<div class="fl" style="display: inline-block; margin: 0 8px;">
+						<a href=""><img src="./static/itying/image/bilibili.png" alt=""></a>
+				</div>
+				<div class="fl" style="display: inline-block; margin: 0 8px;">
+						<a href=""><img src="./static/itying/image/skland.png" alt=""></a>
+				</div>
+				<div class="fl" style="display: inline-block; margin: 0 8px;">
+						<a href=""><img src="./static/itying/image/tiktok.png" alt=""></a>
+				</div>
+				<div class="fl" style="display: inline-block; margin: 0 8px;">
+						<a href=""><img src="./static/itying/image/tap_.png" alt=""></a>
+				</div>
+				<div class="fl" style="display: inline-block; margin: 0 8px;">
+						<a href=""><img src="./static/itying/image/xhh.png" alt=""></a>
+				</div>
+				
+				<div class="clear"></div>
+		</div>
+	  <div style="height: 290px; display: flex; align-items: center; margin-top: 0;">
+			<div class="datu fl"><a href="https://ak.hypergryph.com/#index" target="_blank"><img src="./static/itying/image/arknights.8658b6.jpg" alt=""></a></div>
+			<div class="datu fl"><a href="https://endfield.hypergryph.com/#home" target="_blank"><img src="./static/itying/image/endfield.4cc802.jpg" alt=""></a></div>
+			<div class="datu fr"><a href="https://popucom.hypergryph.com/home" target="_blank"><img src="./static/itying/image/popucom.d40e28.jpg" alt=""></a></div>
+			<div class="clear"></div>
+		</div>
+	<!-- end banner -->
+
+	<!-- start danpin -->
+		<div class="danpin center">
+			<div class="title center">海猫精选，rua牛力荐</div>
+			<div class="main center">
+				<div class="mingxing fl">
+					<div class="sub_mingxing"><a href=""><img src="./static/itying/image/DIAMOND.png" alt=""></a></div>
+					<div class="pinpai"><a href="">源石</a></div>
+					<div class="youhui">首次购买双倍领取，仅限一次</div>
+					<div class="jiage">6元起</div>
+				</div>
+				<div class="mingxing fl">
+					<div class="sub_mingxing"><a href=""><img src="./static/itying/image/yzys.png" alt=""></a></div>
+					<div class="pinpai"><a href="">衍质源石</a></div>
+					<div class="youhui">首次购买双倍领取，仅限一次</div>
+					<div class="jiage">6元起</div>
+				</div>
+				<div class="mingxing fl">
+					<div class="sub_mingxing"><a href=""><img src="./static/itying/image/qqd.png" alt=""></a></div>
+					<div class="pinpai"><a href="">rua牛の奇趣蛋</a></div>
+					<div class="youhui">无需购买，立即到家</div>
+					<div class="jiage">799元</div>
+				</div>
+				<div class="mingxing fl"> 	
+					<div class="sub_mingxing"><a href=""><img src="./static/itying/image/jhdbz.png" alt=""></a></div>
+					<div class="pinpai"><a href="">进化的本质</a></div>
+					<div class="youhui">rua牛被窝的保暖秘诀</div>
+					<div class="jiage">325元</div>
+				</div>
+				<div class="mingxing fl">
+					<div class="sub_mingxing"><a href=""><img src="./static/itying/image/hjy.png" alt=""></a></div>
+					<div class="pinpai"><a href="">花惊怨</a></div>
+					<div class="youhui">更快更强，暴条和呼吸一样简单</div>
+					<div class="jiage">328元起</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+
+
+
+		<!-- 方舟工业 -->
+
+		<div class="category_item w">
+			<div class="title center">方舟工业</div>
+			<div class="main center">
+
+
+				<div class="category_item_left">
+					<img src="static/itying/image/arkindustry.png" alt="方舟工业">
+				</div>
+
+
+				<div class="category_item_right">
+						
+											
+
+								{{range $key,$value := .arkindustryList}}
+									<div class="hot fl">
+										<div class="xinpin"><span style="background:#fff"></span></div>
+										<div class="tu"><a href="http://localhost:8080/category39"><img src="{{$value.GoodsImg | FormatImg}}"></a></div>
+										<div class="miaoshu"><a href="http://localhost:8080/category39">{{$value.Title}}</a></div>
+										<div class="jiage">{{$value.Price}}元</div>
+										<div class="pingjia">325人评价</div>
+										<div class="piao">
+											<a href="">
+												<span>{{Substr $value.SubTitle 0 30}}</span>											
+											</a>
+										</div>
+									</div>
+								{{end}}
+								
+						
+							
+				</div>
+			
+			
+			</div>
+		</div>
+
+
+
+		<!-- 终末地工业 -->
+		<div class="category_item w">
+			<div class="title center">终末地工业</div>
+			<div class="main center">
+
+
+				<div class="category_item_left">
+					<img src="static/itying/image/xylb.png" alt="终末地工业">
+				</div>
+
+
+				<div class="category_item_right">
+						
+											
+
+								{{range $key,$value := .endfieldList}}
+									<div class="hot fl">
+										<div class="xinpin"><span style="background:#fff"></span></div>
+										<div class="tu"><a href="http://localhost:8080/category45"><img src="{{$value.GoodsImg | FormatImg}}"></a></div>
+										<div class="miaoshu"><a href="http://localhost:8080/category45">{{$value.Title}}</a></div>
+										<div class="jiage">{{$value.Price}}元</div>
+										<div class="pingjia">325人评价</div>
+										<div class="piao">
+											<a href="">
+												<span>{{Substr $value.SubTitle 0 30}}</span>											
+											</a>
+										</div>
+									</div>
+								{{end}}
+								
+						
+							
+				</div>
+			
+			
+			</div>
+		</div>
+
+
+		{{ template "itying/public/page_footer.html" .}}
+	</body>
+</html>
+{{end}}

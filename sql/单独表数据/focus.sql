@@ -1,0 +1,4 @@
+INSERT INTO shop.focus (id, title, focus_type, focus_img, link, sort, status, add_time) VALUES (14, '冰队', 1, 'static/upload/20260429/1777447406.jpg', 'https://endfield.hypergryph.com/special/over-the-frontier', 101, 1, 1631677671);
+INSERT INTO shop.focus (id, title, focus_type, focus_img, link, sort, status, add_time) VALUES (17, '小羊', 1, 'static/upload/20260429/1777445055.jpg', 'https://endfield.hypergryph.com/special/over-the-frontier', 100, 1, 1777445055);
+INSERT INTO shop.focus (id, title, focus_type, focus_img, link, sort, status, add_time) VALUES (18, '方舟', 1, 'static/upload/20260429/1777447945.png', 'https://ak.hypergryph.com/anime/', 100, 1, 1777447945);
+INSERT INTO shop.focus (id, title, focus_type, focus_img, link, sort, status, add_time) VALUES (19, '方舟剧照', 1, 'static/upload/20260429/1777448068.png', 'https://ak.hypergryph.com/anime/', 100, 1, 1777448041);

@@ -1,0 +1,10 @@
+INSERT INTO shop.nav (id, title, link, position, is_opennew, relation, sort, status, add_time) VALUES (1, '终末地工业', '', 2, 1, '', 10, 1, 1592919226);
+INSERT INTO shop.nav (id, title, link, position, is_opennew, relation, sort, status, add_time) VALUES (3, '泰拉掉落物', '', 2, 1, '', 10, 1, 1592922081);
+INSERT INTO shop.nav (id, title, link, position, is_opennew, relation, sort, status, add_time) VALUES (4, '方舟工业', 'http://localhost:8080/category39', 2, 1, '37，39，40', 10, 1, 1592922273);
+INSERT INTO shop.nav (id, title, link, position, is_opennew, relation, sort, status, add_time) VALUES (5, '源石', 'http://localhost:8080/category40', 2, 1, '36,52', 10, 1, 1592922331);
+INSERT INTO shop.nav (id, title, link, position, is_opennew, relation, sort, status, add_time) VALUES (8, '泡姆泡姆', 'https://popucom.hypergryph.com/home', 1, 2, '2', 10, 1, 1593529309);
+INSERT INTO shop.nav (id, title, link, position, is_opennew, relation, sort, status, add_time) VALUES (9, '明日方舟', 'https://ak.hypergryph.com/#index', 1, 2, '1', 10, 1, 1593529329);
+INSERT INTO shop.nav (id, title, link, position, is_opennew, relation, sort, status, add_time) VALUES (11, '终末地', 'https://endfield.hypergryph.com/', 1, 2, '1', 10, 1, 1593529451);
+INSERT INTO shop.nav (id, title, link, position, is_opennew, relation, sort, status, add_time) VALUES (15, '来自星辰', 'https://exa.hypergryph.com/#homepage', 1, 2, '', 10, 1, 1784190700);
+INSERT INTO shop.nav (id, title, link, position, is_opennew, relation, sort, status, add_time) VALUES (16, '塔卫二掉落物', '', 2, 1, '', 10, 1, 1784191156);
+INSERT INTO shop.nav (id, title, link, position, is_opennew, relation, sort, status, add_time) VALUES (17, '联系我们', 'https://www.hypergryph.com/', 1, 1, '', 10, 1, 1784685475);

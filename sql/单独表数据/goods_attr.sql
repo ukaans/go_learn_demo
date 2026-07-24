@@ -1,0 +1,17 @@
+INSERT INTO shop.goods_attr (id, goods_id, attribute_cate_id, attribute_id, attribute_title, attribute_type, attribute_value, sort, add_time, status) VALUES (3, 35, 4, 11, '价值', 1, '6元', 10, 1779265795, 1);
+INSERT INTO shop.goods_attr (id, goods_id, attribute_cate_id, attribute_id, attribute_title, attribute_type, attribute_value, sort, add_time, status) VALUES (19, 38, 5, 7, '尺寸', 1, '', 10, 1781337892, 1);
+INSERT INTO shop.goods_attr (id, goods_id, attribute_cate_id, attribute_id, attribute_title, attribute_type, attribute_value, sort, add_time, status) VALUES (47, 37, 5, 7, '尺寸', 1, '', 10, 1784276939, 1);
+INSERT INTO shop.goods_attr (id, goods_id, attribute_cate_id, attribute_id, attribute_title, attribute_type, attribute_value, sort, add_time, status) VALUES (48, 39, 5, 7, '尺寸', 1, '#4寸', 10, 1784276967, 1);
+INSERT INTO shop.goods_attr (id, goods_id, attribute_cate_id, attribute_id, attribute_title, attribute_type, attribute_value, sort, add_time, status) VALUES (55, 43, 4, 11, '价值', 1, '325龙门币', 10, 1784517287, 1);
+INSERT INTO shop.goods_attr (id, goods_id, attribute_cate_id, attribute_id, attribute_title, attribute_type, attribute_value, sort, add_time, status) VALUES (57, 36, 4, 11, '价值', 1, '6元', 10, 1784518014, 1);
+INSERT INTO shop.goods_attr (id, goods_id, attribute_cate_id, attribute_id, attribute_title, attribute_type, attribute_value, sort, add_time, status) VALUES (66, 52, 4, 11, '价值', 1, '325龙门币', 10, 1784535351, 1);
+INSERT INTO shop.goods_attr (id, goods_id, attribute_cate_id, attribute_id, attribute_title, attribute_type, attribute_value, sort, add_time, status) VALUES (67, 41, 5, 7, '尺寸', 1, '', 10, 1784686207, 1);
+INSERT INTO shop.goods_attr (id, goods_id, attribute_cate_id, attribute_id, attribute_title, attribute_type, attribute_value, sort, add_time, status) VALUES (68, 42, 5, 7, '尺寸', 1, '', 10, 1784686223, 1);
+INSERT INTO shop.goods_attr (id, goods_id, attribute_cate_id, attribute_id, attribute_title, attribute_type, attribute_value, sort, add_time, status) VALUES (76, 51, 7, 10, '职业类型', 1, '特种', 10, 1784686703, 1);
+INSERT INTO shop.goods_attr (id, goods_id, attribute_cate_id, attribute_id, attribute_title, attribute_type, attribute_value, sort, add_time, status) VALUES (78, 44, 7, 10, '职业类型', 1, '先锋', 10, 1784862565, 1);
+INSERT INTO shop.goods_attr (id, goods_id, attribute_cate_id, attribute_id, attribute_title, attribute_type, attribute_value, sort, add_time, status) VALUES (79, 46, 7, 10, '职业类型', 1, '重装', 10, 1784862576, 1);
+INSERT INTO shop.goods_attr (id, goods_id, attribute_cate_id, attribute_id, attribute_title, attribute_type, attribute_value, sort, add_time, status) VALUES (80, 47, 7, 10, '职业类型', 1, '狙击', 10, 1784862590, 1);
+INSERT INTO shop.goods_attr (id, goods_id, attribute_cate_id, attribute_id, attribute_title, attribute_type, attribute_value, sort, add_time, status) VALUES (81, 48, 7, 10, '职业类型', 1, '术士', 10, 1784862599, 1);
+INSERT INTO shop.goods_attr (id, goods_id, attribute_cate_id, attribute_id, attribute_title, attribute_type, attribute_value, sort, add_time, status) VALUES (82, 49, 7, 10, '职业类型', 1, '医疗', 10, 1784862607, 1);
+INSERT INTO shop.goods_attr (id, goods_id, attribute_cate_id, attribute_id, attribute_title, attribute_type, attribute_value, sort, add_time, status) VALUES (83, 50, 7, 10, '职业类型', 1, '辅助', 10, 1784862616, 1);
+INSERT INTO shop.goods_attr (id, goods_id, attribute_cate_id, attribute_id, attribute_title, attribute_type, attribute_value, sort, add_time, status) VALUES (84, 45, 7, 10, '职业类型', 1, '近卫', 10, 1784862638, 1);

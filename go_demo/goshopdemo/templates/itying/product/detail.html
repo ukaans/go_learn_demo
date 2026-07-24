@@ -1,0 +1,270 @@
+{{ define "itying/product/detail.html" }}
+
+{{ template "itying/public/page_header.html" .}}
+
+{{ template "itying/public/middle_nav.html" .}}
+
+<link rel="stylesheet" href="static/itying/css/product.css">
+
+<div class="jieshao mt20 w">
+	<div class="left fl">
+		<div class="swiper-container">
+			<div class="swiper-wrapper item_focus" id="item_focus">
+				{{range $key,$value := .goodsImage}}
+				<div class="swiper-slide">
+					<img src="{{$value.ImgUrl | FormatImg}}" />
+				</div>
+				{{end}}
+			</div>
+
+			<div class="swiper-pagination"></div>
+			<div class="swiper-button-next"></div>
+			<div class="swiper-button-prev"></div>
+		</div>
+	</div>
+	<div class="right fr">
+		{{$goodsId := .goods.Id}}
+		<div class="h3 ml20 mt20" id="title" goods_id="{{$goodsId}}">{{.goods.Title}}</div>
+		<div class="jianjie mr40 ml20 mt10">{{.goods.SubTitle}}</div>
+		<div class="jiage ml20 mt10">{{.goods.Price}}元 　<span class="old_price">{{.goods.MarketPrice}}元</span></div>
+		{{$relationGoodsLen := len .relationGoods}}
+		{{if gt $relationGoodsLen 0}}
+			<div class="ft20 ml20 mt20">选择版本</div>
+			<div class="xzbb ml20 mt10 clearfix">
+
+				{{range $key,$value := .relationGoods}}
+				<div class="banben fl {{if eq $value.Id $goodsId}}active{{end}}">
+					<a href="detail?id={{$value.Id}}">
+						<span>{{$value.GoodsVersion}}</span>
+						<span>{{$value.Price}}元</span>
+					</a>
+				</div>
+				{{end}}
+
+
+			</div>
+		{{end}}
+
+
+		{{$goodsColorLen := len .goodsColor}}
+		{{if gt $relationGoodsLen 0}}
+			<div class="ft20 ml20 mt10">选择颜色</div>
+			<div class="xzbb ml20 mt10 clearfix" id="color_list">
+				{{range $key,$value:=.goodsColor}}
+				<div class="banben fl" goods_id="{{$goodsId}}" color_id="{{$value.Id}}">
+					
+						<span class="yuandian" style="background:{{$value.ColorValue}}"></span>
+						<span class="yanse">{{$value.ColorName}}</span>
+					
+				</div>
+				{{end}}
+			</div>
+		{{end}}
+
+
+		{{$goodsItemAttrListLen := len .goodsItemAttrList}}
+		{{if gt $goodsItemAttrListLen 0}}
+			
+				{{range $key,$value := .goodsItemAttrList}}		
+					<div class="ft20 ml20 mt20">{{$value.Cate}}</div>
+					<div class="xzbb ml20 mt10 clearfix">
+						{{range $k,$v := $value.List}}
+						<div class="banben fl">							
+								<span>{{$v}}</span>															
+						</div>
+						{{end}}
+
+					</div>
+				{{end}}
+
+		{{end}}
+		<div class="xqxq mt10 ml20">
+			<div class="top1 mt10">
+				<div class="left1 fl">{{.goods.GoodsVersion}} <span id="color_name"></span></div>
+				<div class="right1 fr">{{.goods.Price}}元</div>
+				<div class="clear"></div>
+			</div>
+			<div class="bot mt20 ft20 ftbc">总计：{{.goods.Price}}元</div>
+		</div>
+		<div class="xiadan ml20 mt10">
+			<input class="jrgwc" type="button" id="addCart" name="jrgwc" value="加入购物车" />
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+
+
+
+<div class="container clearfix">
+	<div class="c_left">
+
+		<h2>看了又看</h2>
+
+		<div class="item">
+
+			<a  href="#">
+
+				<img src="static/itying/image/damedane.jpg" />
+
+				<p class="price recommendLookPrice4183081">￥36888</p>
+
+				<p>法老献唱，方舟金曲，这是流传千年的声音</p>
+
+			</a>
+
+
+		</div>
+		<div class="item">
+
+			<a  href="#">
+
+				<img src="static/itying/image/rua.jpg" />
+
+				<p class="price recommendLookPrice4183081">￥36888</p>
+
+				<p>还是希望大家有种.jpg</p>
+
+			</a>
+
+
+		</div>
+		<div class="item">
+
+		
+			<a  href="#">
+
+				<img src="static/itying/image/jt8-3.jpg" />
+
+				<p class="price recommendLookPrice4183081">￥36888</p>
+
+				<p>依旧集体办公室，依旧全网最尊重黑蛇之人</p>
+
+			</a>
+
+
+		</div>
+	</div>
+
+
+	<div class="c_right">
+		<ul class="detail_list clearfix">
+
+			<li class="">详情描述</li>
+
+			<li class="">规格参数</li>
+
+			<li class="">用户评价</li>
+		</ul>
+
+
+		<div class="detail_info">
+
+			<div class="detail_info_item">
+				{{Str2Html .goods.GoodsContent}}
+			</div>
+			<div class="detail_info_item">
+				<ul>
+
+					{{range $key,$value:=.goodsAttr}}
+
+					{{if ne $value.AttributeValue ""}}
+					<li class="row clearfix">
+
+						<div class="span5">
+
+							<h2>{{$value.AttributeTitle}}</h2>
+						</div>
+
+						<div class="span15">
+
+							{{$value.AttributeValue | FormatAttr | Str2Html}}
+						</div>
+
+
+					</li>
+					{{end}}
+					{{end}}
+				</ul>
+			</div>
+
+
+			<div class="detail_info_item">
+				<ul class="comment_list">
+					<li>
+						<div>
+							<img src="static/itying/image/zc.jpg">
+						</div>
+						<p>玛恩纳!马恩那！码嗯呐！
+							真拿你没办法，坐好喽。
+
+							那是【危机合约】的最终赛段，一场足以载入泰拉史册的巅峰加冕。荒野的风沙与破碎的源石技艺光辉交织，战场之上万众屏息，喧嚣与沉寂反复更迭，每一次技能释放、每一轮战线收缩，都是追梦路上最滚烫的注脚。十余载浮沉征伐，无数次决赛折戟、无数轮遗憾离场，命运无数次将希望与重担，压在孤身前行的玛恩纳肩上。
+							
+							他是驰骋战场多年的传奇，剑术、意志、战术底蕴早已炉火纯青。常年游走于极限压力与绝境防线，历经无数顶级合约轮换与高压环境，他早已习惯孤身扛线，在绝境之中寻找破局的微光，是无数人心中永不低头的战场利刃。
+							
+							这条登顶之路跌宕滚烫，布满荆棘与考验。初始轮次的坚韧坚守，高层合约的绝境翻盘，对阵各路强敌组合的鏖战争锋，一路跌撞前行、逆势而上。褪去年少的急躁锋芒，如今的玛恩纳沉稳笃定，没有花哨的剑招，唯有千锤百炼的剑术底蕴与千帆过尽的从容。每一次举剑坚守，都是重压之下的担当；每一次残局突围，都是不甘遗憾的抗争。
+							
+							整场决赛胶着拉扯、惊心动魄，风险等级交替攀升，战术反复反转，所有人都在等待最终的结局。当最后一声合约清算的音效响彻战场，所有焦灼与坚守终有归宿。尘埃落定，胜负落定！
+							
+							历经十余年漫长蛰伏，跨过无数失利低谷，熬过无数彻夜磨砺，玛恩纳终于登顶合约之巅，摘下那枚梦寐以求的【危机合约】桂冠。压抑多年的遗憾尽数释然，长久的奔赴与坚守终得圆满。战场欢呼轰然炸裂，聚光灯尽数汇聚在他身上，昔日的无冕剑士，终于加冕成王。
+							
+							一剑一念，岁岁逐光。这不止是一场赛事的胜利，更是意志与热爱的终极凯旋。寥寥战场对决，承载着他十余年的坚守与倔强，也圆满了无数追随者漫长的青春信仰，让所有踏过的荆棘、熬过的低谷，都化作登顶时最耀眼的荣光。</p>
+
+						<p class="eval-order-info"> <span class="eval-time">2026-07-04
+								14:00:35</span><span>泰拉talk</span><span>12GB+1TB</span><span></span></p>
+
+					</li>
+					<li>
+						<div>
+							<img src="static/itying/image/mlh.jpg">
+						</div>
+						<p>你们觉得呢，现在站在你面前的是全球黑流树海首杀之人、少人少藏、两把游戏打通n6，鸡翅的亲儿子，全网最尊重鸡翅之人</p>
+
+						<p class="eval-order-info"> <span class="eval-time">2026-07-15
+								19:32:50</span><span>哥伦比亚</span><span>8GB+512GB</span><span></span></p>
+
+					</li>
+					<li>
+						<div>
+							<img src="static/itying/image/mlh.png">
+						</div>
+						<p>策划能打一下寒哥吗，我怀疑是狗假扮的，给我看爆条了</p>
+
+						<p class="eval-order-info"> <span class="eval-time">2026-07-15
+								20:06:07</span><span>月岩白</span><span>6GB+64GB</span><span></span></p>
+
+					</li>
+		
+				</ul>
+			</div>
+
+
+		</div>
+
+	</div>
+
+
+
+</div>
+
+<script>
+	$(function () {	
+	
+		$('#addCart').click(function () {	
+	
+			var goods_id = $('#title').attr('goods_id');
+	
+			var color_id = $('#color_list .active').attr('color_id');
+	
+			location.href = "/cart/addCart?goods_id=" + goods_id + '&color_id=' + color_id;	
+	
+		})
+	})
+	</script>
+
+{{ template "itying/public/page_footer.html" .}}
+
+</body>
+
+</html>
+
+{{end}}
