@@ -1,0 +1,4 @@
+INSERT INTO shop.manager (id, username, password, mobile, email, status, role_id, add_time, is_super) VALUES (1, 'admin', 'e10adc3949ba59abbe56e057f20f883e', '152016111', '5188611114@qq.com', 1, 9, 1771238408, 1);
+INSERT INTO shop.manager (id, username, password, mobile, email, status, role_id, add_time, is_super) VALUES (2, 'zhangsan', 'e10adc3949ba59abbe56e057f20f883e', '1520111122', '342338691122@qq.com', 1, 14, 1771338208, 0);
+INSERT INTO shop.manager (id, username, password, mobile, email, status, role_id, add_time, is_super) VALUES (6, 'lisi', 'e10adc3949ba59abbe56e057f20f883e', '1520171111', '11114292@qq.com', 1, 16, 1771433401, 0);
+INSERT INTO shop.manager (id, username, password, mobile, email, status, role_id, add_time, is_super) VALUES (12, 'add', 'e10adc3949ba59abbe56e057f20f883e', '12345678687', '45654545646', 1, 17, 1776936519, 0);
