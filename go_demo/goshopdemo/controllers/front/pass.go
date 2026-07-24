@@ -254,7 +254,7 @@ func (con PassController) SendCode(c *gin.Context) {
 		}
 
 	} else {
-		//1、生成短信验证码  发送验证码  调用前面课程的接口
+		//1、生成短信验证码  发送验证码
 		fmt.Println("----------自己集成发送短信的接口--------")
 		fmt.Println(smsCode)
 		//2、服务器保存验证码
